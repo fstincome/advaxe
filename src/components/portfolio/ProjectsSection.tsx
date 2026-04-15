@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
-import { useProjects } from '@/hooks/usePortfolioData';
+import { useProjects, getLocalizedField } from '@/hooks/usePortfolioData';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const defaultProjects = [
-  { id: '1', title: 'My Satoshis', category: 'bitcoin', image_url: 'https://advaxe.latechburundi.bi/pics/Mysats.PNG', project_url: 'https://www.mysatoshis.bi/' },
-  { id: '2', title: 'EDI Burundi', category: 'tech', image_url: 'https://advaxe.latechburundi.bi/pics/edi.PNG', project_url: null },
-  { id: '3', title: 'BTC Shule', category: 'bitcoin', image_url: 'https://advaxe.latechburundi.bi/pics/btcshule.PNG', project_url: null },
-  { id: '4', title: 'EBMS Integration', category: 'tech', image_url: 'https://advaxe.latechburundi.bi/pics/ebms.PNG', project_url: null },
-];
-
 const ProjectsSection = () => {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const { data: projects } = useProjects();
   const [filter, setFilter] = useState('all');
 
-  const displayProjects = projects && projects.length > 0 ? projects : defaultProjects;
+  const displayProjects = projects || [];
   const categories = ['all', ...new Set(displayProjects.map(p => p.category).filter(Boolean))];
   const filtered = filter === 'all' ? displayProjects : displayProjects.filter(p => p.category === filter);
 
@@ -43,8 +36,9 @@ const ProjectsSection = () => {
                   onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
                 />
               </div>
-              <div className="p-4 flex items-center justify-between">
+              <div className="p-5">
                 <h3 className="font-semibold">{project.title}</h3>
+                <p className="text-muted-foreground text-sm mt-1">{getLocalizedField(project.description, lang)}</p>
                 {project.project_url && (
                   <a href={project.project_url} target="_blank" rel="noopener noreferrer"
                     className="p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors">

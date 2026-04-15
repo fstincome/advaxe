@@ -1,0 +1,17 @@
+{
+  "name": "Advaxe Ndayisènga - Portfolio",
+  "short_name": "Advaxe",
+  "description": "Portfolio d'Advaxe Ndayisènga - Software Engineer & Bitcoin Developer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1a2332",
+  "icons": [
+    {
+      "src": "/advaxe-profile.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
