@@ -14,7 +14,281 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_logs: {
+        Row: {
+          action: string
+          category: string | null
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: string | null
+        }
+        Insert: {
+          action: string
+          category?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+        }
+        Update: {
+          action?: string
+          category?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+        }
+        Relationships: []
+      }
+      click_tracking: {
+        Row: {
+          created_at: string | null
+          element: string
+          id: string
+          page: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          element: string
+          id?: string
+          page?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          element?: string
+          id?: string
+          page?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "click_tracking_visitor_id_fkey"
+            columns: ["visitor_id"]
+            isOneToOne: false
+            referencedRelation: "visitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experiences: {
+        Row: {
+          company: string
+          company_url: string | null
+          created_at: string | null
+          description: Json
+          id: string
+          period: string
+          sort_order: number | null
+          title: Json
+          updated_at: string | null
+        }
+        Insert: {
+          company: string
+          company_url?: string | null
+          created_at?: string | null
+          description?: Json
+          id?: string
+          period: string
+          sort_order?: number | null
+          title?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          company?: string
+          company_url?: string | null
+          created_at?: string | null
+          description?: Json
+          id?: string
+          period?: string
+          sort_order?: number | null
+          title?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      personal_info: {
+        Row: {
+          id: string
+          info_key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          id?: string
+          info_key: string
+          updated_at?: string | null
+          value?: string
+        }
+        Update: {
+          id?: string
+          info_key?: string
+          updated_at?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          category: string | null
+          description: Json | null
+          id: string
+          image_url: string | null
+          project_url: string | null
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          description?: Json | null
+          id?: string
+          image_url?: string | null
+          project_url?: string | null
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          category?: string | null
+          description?: Json | null
+          id?: string
+          image_url?: string | null
+          project_url?: string | null
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          description: Json
+          icon: string | null
+          id: string
+          sort_order: number | null
+          title: Json
+        }
+        Insert: {
+          description?: Json
+          icon?: string | null
+          id?: string
+          sort_order?: number | null
+          title?: Json
+        }
+        Update: {
+          description?: Json
+          icon?: string | null
+          id?: string
+          sort_order?: number | null
+          title?: Json
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          content: string
+          id: string
+          lang: string
+          section_key: string
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string
+          id?: string
+          lang?: string
+          section_key: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          id?: string
+          lang?: string
+          section_key?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          id: string
+          name: string
+          percentage: number
+          sort_order: number | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          percentage?: number
+          sort_order?: number | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          percentage?: number
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      social_links: {
+        Row: {
+          icon: string | null
+          id: string
+          platform: string
+          sort_order: number | null
+          url: string
+        }
+        Insert: {
+          icon?: string | null
+          id?: string
+          platform: string
+          sort_order?: number | null
+          url: string
+        }
+        Update: {
+          icon?: string | null
+          id?: string
+          platform?: string
+          sort_order?: number | null
+          url?: string
+        }
+        Relationships: []
+      }
+      visitors: {
+        Row: {
+          city: string | null
+          continent: string | null
+          country: string | null
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          page_visited: string | null
+          referrer: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          city?: string | null
+          continent?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          page_visited?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          city?: string | null
+          continent?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          page_visited?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
