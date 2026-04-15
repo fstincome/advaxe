@@ -48,6 +48,10 @@ export const UI_TRANSLATIONS: Translations = {
   edit: { fr: 'Modifier', rn: 'Guhindura', en: 'Edit', es: 'Editar', de: 'Bearbeiten', sw: 'Hariri' },
   newsletter: { fr: 'Abonnez-vous à ma newsletter', rn: 'Iyandikishe ku makuru yanje', en: 'Subscribe to my newsletter', es: 'Suscríbete a mi boletín', de: 'Newsletter abonnieren', sw: 'Jiandikishe kwa jarida langu' },
   subscribe: { fr: 'S\'abonner', rn: 'Kwiyandikisha', en: 'Subscribe', es: 'Suscribirse', de: 'Abonnieren', sw: 'Jiandikishe' },
+  subject: { fr: 'Sujet', rn: 'Insiguro', en: 'Subject', es: 'Asunto', de: 'Betreff', sw: 'Mada' },
+  message: { fr: 'Message', rn: 'Ubutumwa', en: 'Message', es: 'Mensaje', de: 'Nachricht', sw: 'Ujumbe' },
+  all_rights: { fr: 'Tous droits réservés.', rn: 'Uburenganzira bwose burarinzwe.', en: 'All Rights Reserved.', es: 'Todos los derechos reservados.', de: 'Alle Rechte vorbehalten.', sw: 'Haki zote zimehifadhiwa.' },
+  sent_success: { fr: 'Message envoyé avec succès !', rn: 'Ubutumwa bwarungitswe neza!', en: 'Message sent successfully!', es: '¡Mensaje enviado con éxito!', de: 'Nachricht erfolgreich gesendet!', sw: 'Ujumbe umetumwa kwa mafanikio!' },
 };
 
 const LanguageContext = createContext<{
