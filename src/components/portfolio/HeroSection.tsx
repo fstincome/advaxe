@@ -4,8 +4,8 @@ import { usePersonalInfo, useSiteContent, useSocialLinks } from '@/hooks/usePort
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const ICON_MAP: Record<string, any> = {
-  twitter: Twitter, facebook: Facebook, linkedin: Linkedin,
-  instagram: Instagram, youtube: Youtube,
+  twitter: ExternalLink, facebook: ExternalLink, linkedin: ExternalLink,
+  instagram: ExternalLink, youtube: ExternalLink,
 };
 
 const HeroSection = () => {
