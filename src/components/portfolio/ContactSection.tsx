@@ -65,10 +65,10 @@ const ContactSection = () => {
                   onChange={e => setForm({ ...form, email: e.target.value })}
                   className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" />
               </div>
-              <input type="text" placeholder="Subject" value={form.subject}
+              <input type="text" placeholder={t('subject')} value={form.subject}
                 onChange={e => setForm({ ...form, subject: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" />
-              <textarea rows={5} placeholder="Message" required value={form.message}
+              <textarea rows={5} placeholder={t('message')} required value={form.message}
                 onChange={e => setForm({ ...form, message: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none" />
               <button type="submit" className="btn-primary flex items-center gap-2">

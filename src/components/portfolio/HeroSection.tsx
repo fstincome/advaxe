@@ -16,6 +16,7 @@ const HeroSection = () => {
 
   const name = info?.name || 'Advaxe Ndayisènga';
   const subtitle = content?.hero_subtitle || 'Software Engineer | Bitcoin Developer | Tech Innovator';
+  const photoUrl = info?.photo_url || '/advaxe-profile.jpeg';
 
   return (
     <section className="min-h-screen flex items-center pt-16" id="hero">
@@ -24,7 +25,7 @@ const HeroSection = () => {
           <div className="lg:col-span-2 flex flex-col items-center">
             <div className="relative w-64 h-64 md:w-72 md:h-72 rounded-2xl overflow-hidden border-4 border-primary/20 shadow-xl">
               <img
-                src={info?.photo_url || 'https://advaxe.latechburundi.bi/pics/hero.png'}
+                src={photoUrl}
                 alt={name}
                 className="w-full h-full object-cover"
                 onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
