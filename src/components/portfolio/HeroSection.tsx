@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Twitter, Facebook, Linkedin, Instagram, Youtube, MessageCircle, Mail } from 'lucide-react';
+import { MessageCircle, Mail, ExternalLink } from 'lucide-react';
 import { usePersonalInfo, useSiteContent, useSocialLinks } from '@/hooks/usePortfolioData';
 import { useLanguage } from '@/contexts/LanguageContext';
 

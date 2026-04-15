@@ -1,0 +1,540 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useLanguage, LANGUAGES, Lang } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnalytics';
+import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
+import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+  const { lang, setLang, t } = useLanguage();
+  const { dark, toggle } = useTheme();
+  const queryClient = useQueryClient();
+  const [tab, setTab] = useState<'analytics' | 'content' | 'experiences' | 'skills' | 'services' | 'projects'>('analytics');
+  const [user, setUser] = useState<any>(null);
+
+  const { data: visitors } = useVisitors();
+  const { data: activityLogs } = useActivityLogs();
+  const { data: clicks } = useClickTracking();
+  const { data: experiences } = useExperiences();
+  const { data: skills } = useSkills();
+  const { data: services } = useServices();
+  const { data: projects } = useProjects();
+  const { data: content } = useSiteContent();
+  const { data: personalInfo } = usePersonalInfo();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) navigate('/auth');
+      else setUser(session.user);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      if (!session) navigate('/auth');
+      else setUser(session.user);
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
+
+  // Analytics computations
+  const countryStats = visitors?.reduce((acc: Record<string, number>, v) => {
+    acc[v.country || 'Unknown'] = (acc[v.country || 'Unknown'] || 0) + 1;
+    return acc;
+  }, {}) || {};
+
+  const continentStats = visitors?.reduce((acc: Record<string, number>, v) => {
+    acc[v.continent || 'Unknown'] = (acc[v.continent || 'Unknown'] || 0) + 1;
+    return acc;
+  }, {}) || {};
+
+  const sortedCountries = Object.entries(countryStats).sort((a, b) => b[1] - a[1]);
+  const sortedContinents = Object.entries(continentStats).sort((a, b) => b[1] - a[1]);
+
+  const tabs = [
+    { key: 'analytics' as const, icon: BarChart3, label: 'Analytics' },
+    { key: 'content' as const, icon: Settings, label: t('content_mgmt') },
+    { key: 'experiences' as const, icon: Activity, label: t('experience') },
+    { key: 'skills' as const, icon: BarChart3, label: t('skills') },
+    { key: 'services' as const, icon: Settings, label: t('services') },
+    { key: 'projects' as const, icon: MousePointer, label: t('projects') },
+  ];
+
+  if (!user) return null;
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="bg-card border-b border-border sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <h1 className="text-xl font-bold gradient-text">Advaxe Dashboard</h1>
+            <a href="/" className="nav-link flex items-center gap-1 text-xs"><Home className="w-3 h-3" /> Portfolio</a>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1">
+              {LANGUAGES.map(l => (
+                <button key={l.code} onClick={() => setLang(l.code)}
+                  className={`lang-badge ${lang === l.code ? 'lang-badge-active' : ''}`}>
+                  {l.flag}
+                </button>
+              ))}
+            </div>
+            <button onClick={toggle} className="p-2 rounded-lg hover:bg-secondary">
+              {dark ? <Sun className="w-4 h-4 text-primary" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <button onClick={handleLogout} className="p-2 rounded-lg hover:bg-secondary text-destructive">
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {tabs.map(({ key, icon: Icon, label }) => (
+            <button key={key} onClick={() => setTab(key)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === key ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}>
+              <Icon className="w-4 h-4" /> {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Analytics Tab */}
+        {tab === 'analytics' && (
+          <div className="space-y-6">
+            {/* Summary cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="dashboard-card">
+                <div className="flex items-center gap-3 mb-2">
+                  <Users className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold">{t('visitors')}</h3>
+                </div>
+                <p className="text-3xl font-bold">{visitors?.length || 0}</p>
+              </div>
+              <div className="dashboard-card">
+                <div className="flex items-center gap-3 mb-2">
+                  <Activity className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold">{t('activity')}</h3>
+                </div>
+                <p className="text-3xl font-bold">{activityLogs?.length || 0}</p>
+              </div>
+              <div className="dashboard-card">
+                <div className="flex items-center gap-3 mb-2">
+                  <MousePointer className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold">{t('clicks')}</h3>
+                </div>
+                <p className="text-3xl font-bold">{clicks?.length || 0}</p>
+              </div>
+            </div>
+
+            {/* Visitors by country & continent */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="dashboard-card">
+                <h3 className="font-semibold mb-4">{t('visitors')} par pays</h3>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {sortedCountries.map(([country, count]) => (
+                    <div key={country} className="flex items-center justify-between text-sm">
+                      <span>{country}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 h-2 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full bg-primary" style={{ width: `${(count / (visitors?.length || 1)) * 100}%` }} />
+                        </div>
+                        <span className="text-muted-foreground w-8 text-right">{count}</span>
+                      </div>
+                    </div>
+                  ))}
+                  {sortedCountries.length === 0 && <p className="text-muted-foreground text-sm">Aucun visiteur encore</p>}
+                </div>
+              </div>
+              <div className="dashboard-card">
+                <h3 className="font-semibold mb-4">{t('visitors')} par continent</h3>
+                <div className="space-y-2">
+                  {sortedContinents.map(([continent, count]) => (
+                    <div key={continent} className="flex items-center justify-between text-sm">
+                      <span>{continent}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 h-2 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full bg-primary" style={{ width: `${(count / (visitors?.length || 1)) * 100}%` }} />
+                        </div>
+                        <span className="text-muted-foreground w-8 text-right">{count}</span>
+                      </div>
+                    </div>
+                  ))}
+                  {sortedContinents.length === 0 && <p className="text-muted-foreground text-sm">Aucun visiteur encore</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Activity logs */}
+            <div className="dashboard-card">
+              <h3 className="font-semibold mb-4">{t('activity')} Logs</h3>
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {activityLogs?.map(log => (
+                  <div key={log.id} className="flex items-center justify-between text-sm border-b border-border pb-2">
+                    <div>
+                      <span className="font-medium">{log.action}</span>
+                      <span className="text-muted-foreground ml-2">[{log.category}]</span>
+                    </div>
+                    <span className="text-muted-foreground text-xs">{new Date(log.created_at!).toLocaleString()}</span>
+                  </div>
+                ))}
+                {(!activityLogs || activityLogs.length === 0) && <p className="text-muted-foreground text-sm">Aucune activité</p>}
+              </div>
+            </div>
+
+            {/* Click tracking */}
+            <div className="dashboard-card">
+              <h3 className="font-semibold mb-4">{t('clicks')} tracking</h3>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {clicks?.map(click => (
+                  <div key={click.id} className="flex items-center justify-between text-sm border-b border-border pb-2">
+                    <span className="font-medium">{click.element}</span>
+                    <div className="flex items-center gap-4">
+                      <span className="text-muted-foreground">{click.page}</span>
+                      <span className="text-muted-foreground text-xs">{new Date(click.created_at!).toLocaleString()}</span>
+                    </div>
+                  </div>
+                ))}
+                {(!clicks || clicks.length === 0) && <p className="text-muted-foreground text-sm">Aucun clic enregistré</p>}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Content Tab */}
+        {tab === 'content' && <ContentEditor lang={lang} content={content} personalInfo={personalInfo} queryClient={queryClient} t={t} />}
+
+        {/* Experiences Tab */}
+        {tab === 'experiences' && <ExperiencesEditor lang={lang} experiences={experiences} queryClient={queryClient} t={t} />}
+
+        {/* Skills Tab */}
+        {tab === 'skills' && <SkillsEditor skills={skills} queryClient={queryClient} t={t} />}
+
+        {/* Services Tab */}
+        {tab === 'services' && <ServicesEditor lang={lang} services={services} queryClient={queryClient} t={t} />}
+
+        {/* Projects Tab */}
+        {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} />}
+      </div>
+    </div>
+  );
+};
+
+// Content Editor
+const ContentEditor = ({ lang, content, personalInfo, queryClient, t }: any) => {
+  const [aboutText, setAboutText] = useState('');
+  const [heroSubtitle, setHeroSubtitle] = useState('');
+  const [infoForm, setInfoForm] = useState<Record<string, string>>({});
+
+  React.useEffect(() => {
+    setAboutText(content?.about || '');
+    setHeroSubtitle(content?.hero_subtitle || '');
+    setInfoForm(personalInfo || {});
+  }, [content, personalInfo, lang]);
+
+  const saveContent = async (key: string, value: string) => {
+    await supabase.from('site_content').upsert({ section_key: key, lang, content: value }, { onConflict: 'section_key,lang' });
+    queryClient.invalidateQueries({ queryKey: ['site_content'] });
+  };
+
+  const saveInfo = async (key: string, value: string) => {
+    await supabase.from('personal_info').upsert({ info_key: key, value }, { onConflict: 'info_key' });
+    queryClient.invalidateQueries({ queryKey: ['personal_info'] });
+  };
+
+  const infoFields = ['name', 'birthday', 'degree', 'experience', 'phone', 'email', 'address', 'freelance', 'photo_url'];
+
+  return (
+    <div className="space-y-6">
+      <div className="dashboard-card">
+        <h3 className="font-semibold mb-4">Hero Subtitle ({lang.toUpperCase()})</h3>
+        <textarea value={heroSubtitle} onChange={e => setHeroSubtitle(e.target.value)} rows={2}
+          className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none" />
+        <button onClick={() => saveContent('hero_subtitle', heroSubtitle)} className="btn-primary mt-2 text-sm flex items-center gap-2">
+          <Save className="w-4 h-4" /> {t('save')}
+        </button>
+      </div>
+
+      <div className="dashboard-card">
+        <h3 className="font-semibold mb-4">{t('about_me')} ({lang.toUpperCase()})</h3>
+        <textarea value={aboutText} onChange={e => setAboutText(e.target.value)} rows={6}
+          className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none" />
+        <button onClick={() => saveContent('about', aboutText)} className="btn-primary mt-2 text-sm flex items-center gap-2">
+          <Save className="w-4 h-4" /> {t('save')}
+        </button>
+      </div>
+
+      <div className="dashboard-card">
+        <h3 className="font-semibold mb-4">Informations personnelles</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {infoFields.map(key => (
+            <div key={key}>
+              <label className="text-sm text-muted-foreground capitalize">{key.replace('_', ' ')}</label>
+              <input value={infoForm[key] || ''} onChange={e => setInfoForm({ ...infoForm, [key]: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none mt-1" />
+              <button onClick={() => saveInfo(key, infoForm[key] || '')} className="text-xs text-primary mt-1 hover:underline">{t('save')}</button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Experiences Editor
+const ExperiencesEditor = ({ lang, experiences, queryClient, t }: any) => {
+  const [items, setItems] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    setItems(experiences || []);
+  }, [experiences]);
+
+  const save = async (item: any) => {
+    if (item.id && !item.id.startsWith('new-')) {
+      await supabase.from('experiences').update({
+        title: item.title, company: item.company, company_url: item.company_url,
+        period: item.period, description: item.description, sort_order: item.sort_order
+      }).eq('id', item.id);
+    } else {
+      const { id, ...rest } = item;
+      await supabase.from('experiences').insert(rest);
+    }
+    queryClient.invalidateQueries({ queryKey: ['experiences'] });
+  };
+
+  const remove = async (id: string) => {
+    await supabase.from('experiences').delete().eq('id', id);
+    queryClient.invalidateQueries({ queryKey: ['experiences'] });
+  };
+
+  const addNew = () => {
+    setItems([...items, { id: `new-${Date.now()}`, title: {}, company: '', period: '', description: {}, sort_order: items.length }]);
+  };
+
+  const update = (index: number, field: string, value: any) => {
+    const copy = [...items];
+    copy[index] = { ...copy[index], [field]: value };
+    setItems(copy);
+  };
+
+  const updateLocalized = (index: number, field: string, value: string) => {
+    const copy = [...items];
+    const existing = typeof copy[index][field] === 'object' ? copy[index][field] : {};
+    copy[index] = { ...copy[index], [field]: { ...existing, [lang]: value } };
+    setItems(copy);
+  };
+
+  return (
+    <div className="space-y-4">
+      <button onClick={addNew} className="btn-primary text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> {t('add')}</button>
+      {items.map((item, i) => (
+        <div key={item.id} className="dashboard-card space-y-3">
+          <div className="grid md:grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs text-muted-foreground">Title ({lang})</label>
+              <input value={(typeof item.title === 'object' ? item.title[lang] : item.title) || ''}
+                onChange={e => updateLocalized(i, 'title', e.target.value)}
+                className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Company</label>
+              <input value={item.company || ''} onChange={e => update(i, 'company', e.target.value)}
+                className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Period</label>
+              <input value={item.period || ''} onChange={e => update(i, 'period', e.target.value)}
+                className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">URL</label>
+              <input value={item.company_url || ''} onChange={e => update(i, 'company_url', e.target.value)}
+                className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground">Description ({lang})</label>
+            <textarea value={(typeof item.description === 'object' ? item.description[lang] : item.description) || ''}
+              onChange={e => updateLocalized(i, 'description', e.target.value)} rows={3}
+              className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => save(item)} className="btn-primary text-xs flex items-center gap-1"><Save className="w-3 h-3" /> {t('save')}</button>
+            {!item.id.startsWith?.('new-') && (
+              <button onClick={() => remove(item.id)} className="text-xs text-destructive hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> {t('delete')}</button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Skills Editor
+const SkillsEditor = ({ skills, queryClient, t }: any) => {
+  const [items, setItems] = useState<any[]>([]);
+  React.useEffect(() => { setItems(skills || []); }, [skills]);
+
+  const save = async (item: any) => {
+    if (item.id && !item.id.startsWith('new-')) {
+      await supabase.from('skills').update({ name: item.name, percentage: item.percentage, sort_order: item.sort_order }).eq('id', item.id);
+    } else {
+      const { id, ...rest } = item;
+      await supabase.from('skills').insert(rest);
+    }
+    queryClient.invalidateQueries({ queryKey: ['skills'] });
+  };
+
+  const remove = async (id: string) => {
+    await supabase.from('skills').delete().eq('id', id);
+    queryClient.invalidateQueries({ queryKey: ['skills'] });
+  };
+
+  return (
+    <div className="space-y-4">
+      <button onClick={() => setItems([...items, { id: `new-${Date.now()}`, name: '', percentage: 50, sort_order: items.length }])}
+        className="btn-primary text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> {t('add')}</button>
+      <div className="grid md:grid-cols-2 gap-4">
+        {items.map((item, i) => (
+          <div key={item.id} className="dashboard-card flex items-center gap-3">
+            <input value={item.name} onChange={e => { const c = [...items]; c[i] = { ...c[i], name: e.target.value }; setItems(c); }}
+              className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Skill name" />
+            <input type="number" min={0} max={100} value={item.percentage}
+              onChange={e => { const c = [...items]; c[i] = { ...c[i], percentage: parseInt(e.target.value) || 0 }; setItems(c); }}
+              className="w-16 px-2 py-2 rounded-lg bg-secondary border border-border text-sm outline-none text-center" />
+            <span className="text-xs text-muted-foreground">%</span>
+            <button onClick={() => save(item)} className="text-primary hover:underline text-xs">{t('save')}</button>
+            {!item.id.startsWith?.('new-') && (
+              <button onClick={() => remove(item.id)} className="text-destructive text-xs"><Trash2 className="w-3 h-3" /></button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Services Editor
+const ServicesEditor = ({ lang, services, queryClient, t }: any) => {
+  const [items, setItems] = useState<any[]>([]);
+  React.useEffect(() => { setItems(services || []); }, [services]);
+
+  const save = async (item: any) => {
+    if (item.id && !item.id.startsWith('new-')) {
+      await supabase.from('services').update({ title: item.title, description: item.description, icon: item.icon, sort_order: item.sort_order }).eq('id', item.id);
+    } else {
+      const { id, ...rest } = item;
+      await supabase.from('services').insert(rest);
+    }
+    queryClient.invalidateQueries({ queryKey: ['services'] });
+  };
+
+  const remove = async (id: string) => {
+    await supabase.from('services').delete().eq('id', id);
+    queryClient.invalidateQueries({ queryKey: ['services'] });
+  };
+
+  const update = (index: number, field: string, value: string) => {
+    const copy = [...items];
+    const existing = typeof copy[index][field] === 'object' ? copy[index][field] : {};
+    copy[index] = { ...copy[index], [field]: { ...existing, [lang]: value } };
+    setItems(copy);
+  };
+
+  return (
+    <div className="space-y-4">
+      <button onClick={() => setItems([...items, { id: `new-${Date.now()}`, title: {}, description: {}, icon: 'code', sort_order: items.length }])}
+        className="btn-primary text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> {t('add')}</button>
+      {items.map((item, i) => (
+        <div key={item.id} className="dashboard-card space-y-3">
+          <div className="grid md:grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs text-muted-foreground">Title ({lang})</label>
+              <input value={(typeof item.title === 'object' ? item.title[lang] : '') || ''}
+                onChange={e => update(i, 'title', e.target.value)}
+                className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Icon (code, bitcoin, layout, lightbulb)</label>
+              <input value={item.icon || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], icon: e.target.value }; setItems(c); }}
+                className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground">Description ({lang})</label>
+            <textarea value={(typeof item.description === 'object' ? item.description[lang] : '') || ''}
+              onChange={e => update(i, 'description', e.target.value)} rows={2}
+              className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => save(item)} className="btn-primary text-xs flex items-center gap-1"><Save className="w-3 h-3" /> {t('save')}</button>
+            {!item.id.startsWith?.('new-') && (
+              <button onClick={() => remove(item.id)} className="text-xs text-destructive hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> {t('delete')}</button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Projects Editor
+const ProjectsEditor = ({ projects, queryClient, t }: any) => {
+  const [items, setItems] = useState<any[]>([]);
+  React.useEffect(() => { setItems(projects || []); }, [projects]);
+
+  const save = async (item: any) => {
+    if (item.id && !item.id.startsWith('new-')) {
+      await supabase.from('projects').update({ title: item.title, category: item.category, image_url: item.image_url, project_url: item.project_url, sort_order: item.sort_order }).eq('id', item.id);
+    } else {
+      const { id, ...rest } = item;
+      await supabase.from('projects').insert(rest);
+    }
+    queryClient.invalidateQueries({ queryKey: ['projects'] });
+  };
+
+  const remove = async (id: string) => {
+    await supabase.from('projects').delete().eq('id', id);
+    queryClient.invalidateQueries({ queryKey: ['projects'] });
+  };
+
+  return (
+    <div className="space-y-4">
+      <button onClick={() => setItems([...items, { id: `new-${Date.now()}`, title: '', category: 'tech', image_url: '', project_url: '', sort_order: items.length }])}
+        className="btn-primary text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> {t('add')}</button>
+      {items.map((item, i) => (
+        <div key={item.id} className="dashboard-card">
+          <div className="grid md:grid-cols-2 gap-3">
+            <input value={item.title || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], title: e.target.value }; setItems(c); }}
+              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Title" />
+            <select value={item.category || 'tech'} onChange={e => { const c = [...items]; c[i] = { ...c[i], category: e.target.value }; setItems(c); }}
+              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none">
+              <option value="tech">Tech</option>
+              <option value="bitcoin">Bitcoin</option>
+            </select>
+            <input value={item.image_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], image_url: e.target.value }; setItems(c); }}
+              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Image URL" />
+            <input value={item.project_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], project_url: e.target.value }; setItems(c); }}
+              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Project URL" />
+          </div>
+          <div className="flex gap-2 mt-3">
+            <button onClick={() => save(item)} className="btn-primary text-xs flex items-center gap-1"><Save className="w-3 h-3" /> {t('save')}</button>
+            {!item.id.startsWith?.('new-') && (
+              <button onClick={() => remove(item.id)} className="text-xs text-destructive hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> {t('delete')}</button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Dashboard;
