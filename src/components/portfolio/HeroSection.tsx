@@ -3,10 +3,7 @@ import { MessageCircle, ArrowRight, MapPin, Sparkles, Briefcase, Calendar, Gradu
 import { usePersonalInfo, useSiteContent, useSocialLinks, useSkills, useServices, useProjects, getLocalizedField } from '@/hooks/usePortfolioData';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const SOCIAL_ICON: Record<string, any> = {
-  twitter: Twitter, facebook: Facebook, linkedin: Linkedin,
-  instagram: Instagram, youtube: Youtube, github: Github,
-};
+const SOCIAL_ICON: Record<string, any> = {};
 
 const HeroSection = () => {
   const { lang, t } = useLanguage();
