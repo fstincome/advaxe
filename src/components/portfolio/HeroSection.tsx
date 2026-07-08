@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, ArrowRight, MapPin, Sparkles, Briefcase, Calendar, GraduationCap, Mail, Github, Linkedin, Twitter, Facebook, Instagram, Youtube, ExternalLink } from 'lucide-react';
+import { MessageCircle, ArrowRight, MapPin, Sparkles, Briefcase, Calendar, GraduationCap, Mail, ExternalLink } from 'lucide-react';
 import { usePersonalInfo, useSiteContent, useSocialLinks, useSkills, useServices, useProjects, getLocalizedField } from '@/hooks/usePortfolioData';
 import { useLanguage } from '@/contexts/LanguageContext';
 
