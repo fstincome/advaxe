@@ -67,6 +67,8 @@ const Dashboard = () => {
     { key: 'skills' as const, icon: BarChart3, label: t('skills') },
     { key: 'services' as const, icon: Settings, label: t('services') },
     { key: 'projects' as const, icon: MousePointer, label: t('projects') },
+    ...CMS_MODULES.map((module) => ({ key: module.key, icon: Settings, label: module.label })),
+    { key: 'messages', icon: Activity, label: 'Messages' },
   ];
 
   if (!user) return null;
