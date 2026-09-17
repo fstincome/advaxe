@@ -89,3 +89,32 @@ export function WorkDetailPage() {
   if (!project) return <section className="page-section"><div className="site-shell"><div className="empty-state">Project not found.</div></div></section>;
   return <article className="page-section"><div className="site-shell"><header className="page-intro"><p className="eyebrow">{project.category} · {project.current_status || 'Published'}</p><h1>{project.title}</h1><p>{getLocalizedField(project.description, lang)}</p></header>{project.image_url && <img src={project.image_url} alt={project.title} className="case-image" />}<div className="case-grid"><section><p className="eyebrow">The problem</p><h2>Context and challenge</h2><p>{project.problem || getLocalizedField(project.description, lang)}</p></section><section><p className="eyebrow">The approach</p><h2>Building the system</h2><p>{project.approach || 'Product design, software engineering and practical delivery adapted to the local operating context.'}</p></section><section><p className="eyebrow">Impact</p><h2>What changed</h2><p>{project.impact || 'A focused digital system designed for real users, maintainability and long-term ownership.'}</p></section></div>{project.project_url && <Button asChild><a href={project.project_url} target="_blank" rel="noreferrer">Visit project <ExternalLink /></a></Button>}</div></article>;
 }
+export function ArticleDetailPage() {
+  const { slug } = useParams();
+  const { lang } = useLanguage();
+  const { data: articles } = useArticles();
+  const item = articles?.find((entry) => entry.slug === slug || entry.id === slug);
+  if (!item) return <section className="page-section"><div className="site-shell"><div className="empty-state">Publication not found.</div></div></section>;
+  const paragraphs = String(item.content ?? item.excerpt ?? '').split(/\n{2,}/).filter(Boolean);
+  return (
+    <article className="page-section">
+      <div className="site-shell">
+        <header className="page-intro">
+          <p className="eyebrow">{publicationLabel(item.publication_type)}{item.category ? ` · ${item.category}` : ''}{item.published_at ? ` · ${new Date(item.published_at).toLocaleDateString(lang)}` : ''}</p>
+          <h1>{item.title}</h1>
+          <p>{item.excerpt}</p>
+        </header>
+        {item.cover_image_url && <img src={item.cover_image_url} alt={String(item.title ?? 'Publication')} loading="lazy" className="case-image" />}
+        <div className="editorial-copy">
+          {paragraphs.length ? paragraphs.map((text, index) => <p key={index}>{text}</p>) : <p>This publication is being prepared.</p>}
+        </div>
+        <div className="flex flex-wrap gap-4 pt-6">
+          {item.document_url && (
+            <Button asChild><a href={String(item.document_url)} target="_blank" rel="noreferrer">Download the full document <Download /></a></Button>
+          )}
+          <Button variant="outline" asChild><Link to={`/${lang}/ideas`}>Back to publications</Link></Button>
+        </div>
+      </div>
+    </article>
+  );
+}
