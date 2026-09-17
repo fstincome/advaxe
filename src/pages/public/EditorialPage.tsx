@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, BookOpen, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText } from 'lucide-react';
+import { ArrowRight, Award, BookOpen, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText, Sparkles } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -15,6 +15,7 @@ const labels: Record<string, { eyebrow: string; title: string; intro: string }> 
   speaking: { eyebrow: 'Speaking & teaching', title: 'Knowledge becomes useful when it moves.', intro: 'Talks, workshops, bootcamps and learning programs for developers, organizations and communities.' },
   community: { eyebrow: 'Community & contributions', title: 'Building ecosystems, not only products.', intro: 'Developer groups, Bitcoin education, mentorship and civic technology initiatives across the region.' },
   media: { eyebrow: 'Media', title: 'Conversations, interviews and field notes.', intro: 'Selected recordings, features, publications and moments from the work.' },
+  credentials: { eyebrow: 'Certifications & skills', title: 'Verified training, proven practice.', intro: 'Degrees, certifications and core technical capabilities developed through engineering, open infrastructure and teaching work.' },
 };
 
 export const PUBLICATION_TYPES = [
@@ -71,6 +72,28 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
           ) : <EmptyState icon={BookOpen} text="Articles, studies and policy briefs will appear here as they are published." />}
         </div>
       );
+    }
+    if (type === 'credentials') {
+      const groups = [
+        { key: 'certification', label: 'Certifications & education', icon: Award },
+        { key: 'skill', label: 'Core skills', icon: Sparkles },
+      ] as const;
+      if (!credentials?.length) return <EmptyState icon={Award} text="Certifications and skills will appear here once added from the dashboard." />;
+      return <div className="space-y-12">{groups.map(({ key, label, icon: GroupIcon }) => {
+        const items = credentials.filter((item) => (item.entry_type ?? 'certification') === key);
+        if (!items.length) return null;
+        return <section key={key} className="space-y-6">
+          <h2 className="section-heading">{label}</h2>
+          <div className="article-grid">{items.map((item) => <article key={item.id} className="article-item">
+            <GroupIcon />
+            <p className="eyebrow">{[item.issuer, item.category, item.level].filter(Boolean).join(' · ')}</p>
+            <h3>{item.title || item.slug}</h3>
+            {item.description ? <p>{item.description}</p> : null}
+            {item.issue_date ? <p className="text-sm text-muted-foreground">{new Date(item.issue_date).getFullYear()}</p> : null}
+            {item.credential_url ? <a href={String(item.credential_url)} target="_blank" rel="noreferrer">View credential <ExternalLink /></a> : null}
+          </article>)}</div>
+        </section>;
+      })}</div>;
     }
     const collection = type === 'speaking' ? collections?.speaking : type === 'community' ? collections?.community : collections?.media;
     const Icon = type === 'speaking' ? Mic2 : type === 'community' ? Network : PlayCircle;
