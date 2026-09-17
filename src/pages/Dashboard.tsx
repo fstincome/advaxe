@@ -530,52 +530,131 @@ const ServicesEditor = ({ lang, services, queryClient, t }: any) => {
   );
 };
 
-// Projects Editor
-const ProjectsEditor = ({ projects, queryClient, t }: any) => {
+// Work / Projects Editor (full fields + per-language texts)
+const PROJECT_TEXT_FIELDS: { name: string; label: string }[] = [
+  { name: 'description', label: 'Description' },
+  { name: 'problem', label: 'Problem' },
+  { name: 'approach', label: 'Approach' },
+  { name: 'impact', label: 'Impact' },
+];
+
+const ProjectsEditor = ({ projects, queryClient, t, lang }: any) => {
   const [items, setItems] = useState<any[]>([]);
   React.useEffect(() => { setItems(projects || []); }, [projects]);
 
+  const patch = (i: number, changes: Record<string, unknown>) => {
+    setItems((prev) => prev.map((item, index) => (index === i ? { ...item, ...changes } : item)));
+  };
+
+  const patchText = (i: number, field: string, value: string) => {
+    setItems((prev) => prev.map((item, index) => {
+      if (index !== i) return item;
+      const current = item[field];
+      const base = current && typeof current === 'object' ? current : (typeof current === 'string' && current ? { en: current } : {});
+      return { ...item, [field]: { ...base, [lang]: value } };
+    }));
+  };
+
+  const textValue = (item: any, field: string) => {
+    const current = item[field];
+    if (!current) return '';
+    if (typeof current === 'string') return lang === 'en' ? current : '';
+    return current[lang] || '';
+  };
+
   const save = async (item: any) => {
-    if (item.id && !item.id.startsWith('new-')) {
-      await supabase.from('projects').update({ title: item.title, category: item.category, image_url: item.image_url, project_url: item.project_url, sort_order: item.sort_order }).eq('id', item.id);
+    const payload: Record<string, unknown> = {
+      slug: item.slug || null,
+      title: item.title,
+      category: item.category,
+      status: item.status || 'published',
+      featured: !!item.featured,
+      sort_order: Number(item.sort_order) || 0,
+      image_url: item.image_url || null,
+      project_url: item.project_url || null,
+      github_url: item.github_url || null,
+      demo_url: item.demo_url || null,
+      current_status: item.current_status || null,
+      role: item.role || null,
+      project_year: item.project_year ? Number(item.project_year) : null,
+      description: item.description || null,
+      problem: item.problem || null,
+      approach: item.approach || null,
+      impact: item.impact || null,
+    };
+    if (item.id && !String(item.id).startsWith('new-')) {
+      await supabase.from('projects').update(payload).eq('id', item.id);
     } else {
-      const { id, ...rest } = item;
-      await supabase.from('projects').insert(rest);
+      await supabase.from('projects').insert(payload as any);
     }
     queryClient.invalidateQueries({ queryKey: ['projects'] });
   };
 
-  const remove = async (id: string) => {
-    await supabase.from('projects').delete().eq('id', id);
+  const remove = async (item: any, i: number) => {
+    if (String(item.id).startsWith('new-')) {
+      setItems((prev) => prev.filter((_, index) => index !== i));
+      return;
+    }
+    await supabase.from('projects').delete().eq('id', item.id);
     queryClient.invalidateQueries({ queryKey: ['projects'] });
   };
 
+  const inputClass = 'w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none';
+
   return (
     <div className="space-y-4">
-      <button onClick={() => setItems([...items, { id: `new-${Date.now()}`, title: '', category: 'tech', image_url: '', project_url: '', sort_order: items.length }])}
+      <p className="text-xs text-muted-foreground">
+        Les textes (description, problème, approche, impact) sont enregistrés pour la langue sélectionnée en haut : <strong>{lang.toUpperCase()}</strong>.
+      </p>
+      <button onClick={() => setItems([...items, { id: `new-${Date.now()}`, slug: '', title: '', category: '', status: 'published', featured: false, sort_order: items.length }])}
         className="btn-primary text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> {t('add')}</button>
       {items.map((item, i) => (
-        <div key={item.id} className="dashboard-card">
+        <div key={item.id} className="dashboard-card space-y-3">
           <div className="grid md:grid-cols-2 gap-3">
-            <input value={item.title || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], title: e.target.value }; setItems(c); }}
-              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Title" />
-            <select value={item.category || 'tech'} onChange={e => { const c = [...items]; c[i] = { ...c[i], category: e.target.value }; setItems(c); }}
-              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none">
-              <option value="tech">Tech</option>
-              <option value="bitcoin">Bitcoin</option>
-            </select>
-            <div>
-              <label className="text-xs text-muted-foreground">Image</label>
-              <MediaPicker value={item.image_url || ''} onChange={(url) => { const c = [...items]; c[i] = { ...c[i], image_url: url }; setItems(c); }} />
-            </div>
-            <input value={item.project_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], project_url: e.target.value }; setItems(c); }}
-              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Project URL" />
+            <label className="text-xs text-muted-foreground">Title
+              <input value={item.title || ''} onChange={e => patch(i, { title: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Slug (URL)
+              <input value={item.slug || ''} onChange={e => patch(i, { slug: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Category
+              <input value={item.category || ''} onChange={e => patch(i, { category: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Role
+              <input value={item.role || ''} onChange={e => patch(i, { role: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Current status
+              <input value={item.current_status || ''} onChange={e => patch(i, { current_status: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Year
+              <input type="number" value={item.project_year ?? ''} onChange={e => patch(i, { project_year: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Status (draft / published)
+              <select value={item.status || 'published'} onChange={e => patch(i, { status: e.target.value })} className={inputClass}>
+                <option value="published">published</option>
+                <option value="draft">draft</option>
+              </select></label>
+            <label className="text-xs text-muted-foreground">Order
+              <input type="number" value={item.sort_order ?? 0} onChange={e => patch(i, { sort_order: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Project URL
+              <input value={item.project_url || ''} onChange={e => patch(i, { project_url: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">GitHub URL
+              <input value={item.github_url || ''} onChange={e => patch(i, { github_url: e.target.value })} className={inputClass} /></label>
+            <label className="text-xs text-muted-foreground">Demo URL
+              <input value={item.demo_url || ''} onChange={e => patch(i, { demo_url: e.target.value })} className={inputClass} /></label>
+            <label className="flex items-center gap-2 text-xs text-muted-foreground mt-5">
+              <input type="checkbox" checked={!!item.featured} onChange={e => patch(i, { featured: e.target.checked })} />
+              Featured (Selected work / accueil)
+            </label>
           </div>
-          <div className="flex gap-2 mt-3">
+          <div>
+            <label className="text-xs text-muted-foreground">Image</label>
+            <MediaPicker value={item.image_url || ''} onChange={(url) => patch(i, { image_url: url })} />
+          </div>
+          <div className="grid md:grid-cols-2 gap-3">
+            {PROJECT_TEXT_FIELDS.map((field) => (
+              <label key={field.name} className="text-xs text-muted-foreground">{field.label} ({lang.toUpperCase()})
+                <textarea rows={3} value={textValue(item, field.name)} onChange={e => patchText(i, field.name, e.target.value)} className={inputClass} />
+              </label>
+            ))}
+          </div>
+          <div className="flex gap-2">
             <button onClick={() => save(item)} className="btn-primary text-xs flex items-center gap-1"><Save className="w-3 h-3" /> {t('save')}</button>
-            {!item.id.startsWith?.('new-') && (
-              <button onClick={() => remove(item.id)} className="text-xs text-destructive hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> {t('delete')}</button>
-            )}
+            <button onClick={() => remove(item, i)} className="text-xs text-destructive hover:underline flex items-center gap-1"><Trash2 className="w-3 h-3" /> {t('delete')}</button>
           </div>
         </div>
       ))}
