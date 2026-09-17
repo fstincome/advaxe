@@ -5,6 +5,7 @@ import { useLanguage, LANGUAGES, Lang } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnalytics';
 import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
+import { useProjectCategories } from '@/hooks/useProfessionalContent';
 import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home, Menu, LayoutGrid } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
@@ -540,6 +541,7 @@ const PROJECT_TEXT_FIELDS: { name: string; label: string }[] = [
 
 const ProjectsEditor = ({ projects, queryClient, t, lang }: any) => {
   const [items, setItems] = useState<any[]>([]);
+  const { data: categories } = useProjectCategories();
   React.useEffect(() => { setItems(projects || []); }, [projects]);
 
   const patch = (i: number, changes: Record<string, unknown>) => {
@@ -616,7 +618,11 @@ const ProjectsEditor = ({ projects, queryClient, t, lang }: any) => {
             <label className="text-xs text-muted-foreground">Slug (URL)
               <input value={item.slug || ''} onChange={e => patch(i, { slug: e.target.value })} className={inputClass} /></label>
             <label className="text-xs text-muted-foreground">Category
-              <input value={item.category || ''} onChange={e => patch(i, { category: e.target.value })} className={inputClass} /></label>
+              <select value={item.category || ''} onChange={e => patch(i, { category: e.target.value })} className={inputClass}>
+                <option value="">—</option>
+                {(categories ?? []).map((category: any) => <option key={category.id} value={category.slug}>{category.name || category.slug}</option>)}
+                {item.category && !(categories ?? []).some((category: any) => category.slug === item.category) && <option value={item.category}>{item.category}</option>}
+              </select></label>
             <label className="text-xs text-muted-foreground">Role
               <input value={item.role || ''} onChange={e => patch(i, { role: e.target.value })} className={inputClass} /></label>
             <label className="text-xs text-muted-foreground">Current status

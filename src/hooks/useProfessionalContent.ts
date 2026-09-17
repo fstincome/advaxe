@@ -26,6 +26,25 @@ export const useExpertise = () => {
   });
 };
 
+export const useProjectCategories = () => {
+  const { lang } = useLanguage();
+  return useQuery({
+    queryKey: ['project-categories', lang],
+    queryFn: async () => {
+      const { data: categories, error } = await supabase.from('project_categories').select('*').eq('visible', true).order('sort_order');
+      if (error) throw error;
+      if (!categories?.length) return [];
+      const ids = categories.map((item) => item.id);
+      const { data: translations } = await supabase.from('content_translations').select('entity_id,field_name,value,lang').eq('entity_type', 'project_category').in('entity_id', ids).in('lang', [lang, 'en']);
+      return categories.map((category) => {
+        const english = translationMap(translations?.filter((row) => row.entity_id === category.id && row.lang === 'en') ?? null);
+        const localized = translationMap(translations?.filter((row) => row.entity_id === category.id && row.lang === lang) ?? null);
+        return { ...category, ...english, ...localized } as typeof category & TranslationMap;
+      });
+    },
+  });
+};
+
 export const useArticles = () => {
   const { lang } = useLanguage();
   return useQuery({
