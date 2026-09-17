@@ -193,6 +193,9 @@
   .brand-mark {
     @apply flex h-9 w-9 items-center justify-center bg-foreground font-display text-sm font-bold text-background;
   }
+  .brand-photo {
+    @apply h-10 w-10 rounded-full object-cover ring-1 ring-border;
+  }
   .eyebrow {
     @apply font-display text-xs font-medium uppercase tracking-[0.22em] text-primary;
   }
