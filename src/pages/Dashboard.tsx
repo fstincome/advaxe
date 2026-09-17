@@ -310,8 +310,13 @@ const ContentEditor = ({ lang, content, personalInfo, queryClient, t }: any) => 
 const ExperiencesEditor = ({ lang, experiences, queryClient, t }: any) => {
   const [items, setItems] = useState<any[]>([]);
 
+  const yearOf = (item: any) => {
+    const years = `${item?.start_date ?? ''} ${item?.period ?? ''}`.match(/\d{4}/g);
+    return years?.length ? Math.max(...years.map(Number)) : 0;
+  };
+
   React.useEffect(() => {
-    setItems(experiences || []);
+    setItems([...(experiences || [])].sort((a, b) => yearOf(b) - yearOf(a)));
   }, [experiences]);
 
   const save = async (item: any) => {
