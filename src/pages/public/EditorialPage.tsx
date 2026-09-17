@@ -28,6 +28,13 @@ export const PUBLICATION_TYPES = [
 export const publicationLabel = (value?: string | null) =>
   value === 'study' ? 'Study' : value === 'policy_brief' ? 'Policy brief' : 'Article';
 
+const experienceYear = (item: any) => {
+  const source = `${item?.start_date ?? ''} ${item?.period ?? ''}`;
+  const years = source.match(/\d{4}/g);
+  if (!years?.length) return 0;
+  return Math.max(...years.map(Number));
+};
+
 export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   const [publicationFilter, setPublicationFilter] = useState<string>('all');
   const { lang } = useLanguage();
