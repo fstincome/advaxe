@@ -16,7 +16,7 @@ const Dashboard = () => {
   const { lang, setLang, t } = useLanguage();
   const { dark, toggle } = useTheme();
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<'analytics' | 'content' | 'experiences' | 'skills' | 'services' | 'projects'>('analytics');
+  const [tab, setTab] = useState<string>('analytics');
   const [user, setUser] = useState<any>(null);
 
   const { data: visitors } = useVisitors();
