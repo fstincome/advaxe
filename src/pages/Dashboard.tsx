@@ -343,7 +343,7 @@ const ExperiencesEditor = ({ lang, experiences, queryClient, t }: any) => {
     if (item.id && !item.id.startsWith('new-')) {
       await supabase.from('experiences').update({
         title: item.title, company: item.company, company_url: item.company_url,
-        period: item.period, description: item.description, sort_order: item.sort_order
+        period: item.period, description: item.description, sort_order: item.sort_order, logo_url: item.logo_url
       }).eq('id', item.id);
     } else {
       const { id, ...rest } = item;
