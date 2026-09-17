@@ -4,8 +4,9 @@ import { Plus, Save, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { LANGUAGES, Lang } from '@/contexts/LanguageContext';
 import { toast } from '@/hooks/use-toast';
+import MediaPicker from './MediaPicker';
 
-export type FieldType = 'text' | 'textarea' | 'date' | 'number' | 'boolean';
+export type FieldType = 'text' | 'textarea' | 'date' | 'number' | 'boolean' | 'media';
 
 export interface BaseField {
   name: string;
@@ -117,6 +118,7 @@ export default function CollectionManager({
   const renderInput = (field: BaseField, value: any, onChange: (next: any) => void) => {
     const shared = 'w-full border border-input bg-background px-3 py-2 text-sm';
     if (field.type === 'textarea') return <textarea rows={4} className={shared} value={value ?? ''} placeholder={field.placeholder} onChange={(event) => onChange(event.target.value)} />;
+    if (field.type === 'media') return <MediaPicker value={value} onChange={(next) => onChange(next)} />;
     if (field.type === 'boolean') return <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={Boolean(value)} onChange={(event) => onChange(event.target.checked)} />{field.label}</label>;
     return <input type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} className={shared} value={value ?? ''} placeholder={field.placeholder} onChange={(event) => onChange(field.type === 'number' ? Number(event.target.value) : event.target.value)} />;
   };
