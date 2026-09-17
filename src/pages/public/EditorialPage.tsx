@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedField, useExperiences, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
-import { useArticles, useCertifications, useExpertise, useProfessionalCollections } from '@/hooks/useProfessionalContent';
+import { useArticles, useCertifications, useExpertise, useProfessionalCollections, useProjectCategories } from '@/hooks/useProfessionalContent';
 
 const labels: Record<string, { eyebrow: string; title: string; intro: string }> = {
   about: { eyebrow: 'Identity & direction', title: 'Engineering resilient systems for real-world impact.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
@@ -45,12 +45,18 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   const { data: articles } = useArticles();
   const { data: collections } = useProfessionalCollections();
   const { data: credentials } = useCertifications();
+  const { data: projectCategories } = useProjectCategories();
+  const categoryName = (slug?: string | null) => {
+    if (!slug) return '';
+    const match = projectCategories?.find((category) => category.slug === slug);
+    return (match?.name as string) || slug;
+  };
   const base = labels[type];
   const about = copy?.about;
   const render = () => {
     if (type === 'about') return <div className="about-layout"><figure className="about-portrait"><img src="/advaxe-profile.jpeg" alt="Advaxe Ndayisenga, software engineer and technology entrepreneur" loading="lazy" /><figcaption>Advaxe Ndayisenga, Gitega, Burundi</figcaption></figure><div className="editorial-copy"><p>{about || base.intro}</p><h2>Why I build</h2><p>I believe digital systems should be locally relevant, understandable and resilient. My work connects international engineering practice with the realities of communities and organizations in East Africa.</p><h2>Open money, practical agency</h2><p>Bitcoin and Lightning are not abstract technologies in this context. They are tools for financial inclusion, peer-to-peer exchange and infrastructure that communities can inspect, adapt and own.</p><h2>Currently exploring</h2><p>Interoperable payment infrastructure, developer education, resilient web architecture and the role of open protocols in African digital economies.</p></div></div>;
     if (type === 'expertise') return <div className="expertise-grid">{expertise?.map((item, index) => <article className="expertise-item" key={item.id}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>;
-    if (type === 'work') return <div className="work-list">{projects?.map((item) => <article key={item.id} className="work-row"><div><p className="eyebrow">{item.category}</p><h2>{item.title}</h2><p>{getLocalizedField(item.description, lang)}</p></div><Button variant="outline" asChild><Link to={`/${lang}/work/${item.slug || item.id}`}>Case study <ArrowRight /></Link></Button></article>)}</div>;
+    if (type === 'work') return <div className="work-list">{projects?.map((item) => <article key={item.id} className="work-row"><div><p className="eyebrow">{categoryName(item.category)}</p><h2>{item.title}</h2><p>{getLocalizedField(item.description, lang)}</p></div><Button variant="outline" asChild><Link to={`/${lang}/work/${item.slug || item.id}`}>Case study <ArrowRight /></Link></Button></article>)}</div>;
     if (type === 'experience') {
       const sorted = [...(experiences ?? [])].sort((a, b) => experienceYear(b) - experienceYear(a));
       return <div className="timeline">{sorted.map((item) => <article key={item.id} className="timeline-row"><div className="timeline-year">{item.period}</div><div><p className="eyebrow">{item.company}</p><h2>{getLocalizedField(item.title, lang)}</h2><p>{getLocalizedField(item.description, lang)}</p></div></article>)}</div>;
@@ -119,9 +125,11 @@ function EmptyState({ icon: Icon, text }: { icon: typeof BookOpen; text: string 
 
 export function WorkDetailPage() {
   const { slug } = useParams(); const { lang } = useLanguage(); const { data: projects } = useProjects();
+  const { data: projectCategories } = useProjectCategories();
   const project = projects?.find((item) => item.slug === slug || item.id === slug);
   if (!project) return <section className="page-section"><div className="site-shell"><div className="empty-state">Project not found.</div></div></section>;
-  return <article className="page-section"><div className="site-shell"><header className="page-intro"><p className="eyebrow">{project.category} · {project.current_status || 'Published'}</p><h1>{project.title}</h1><p>{getLocalizedField(project.description, lang)}</p></header>{project.image_url && <img src={project.image_url} alt={project.title} className="case-image" />}<div className="case-grid"><section><p className="eyebrow">The problem</p><h2>Context and challenge</h2><p>{project.problem || getLocalizedField(project.description, lang)}</p></section><section><p className="eyebrow">The approach</p><h2>Building the system</h2><p>{project.approach || 'Product design, software engineering and practical delivery adapted to the local operating context.'}</p></section><section><p className="eyebrow">Impact</p><h2>What changed</h2><p>{project.impact || 'A focused digital system designed for real users, maintainability and long-term ownership.'}</p></section></div>{project.project_url && <Button asChild><a href={project.project_url} target="_blank" rel="noreferrer">Visit project <ExternalLink /></a></Button>}</div></article>;
+  const category = projectCategories?.find((entry) => entry.slug === project.category)?.name || project.category;
+  return <article className="page-section"><div className="site-shell"><header className="page-intro"><p className="eyebrow">{category} · {project.current_status || 'Published'}</p><h1>{project.title}</h1><p>{getLocalizedField(project.description, lang)}</p></header>{project.image_url && <img src={project.image_url} alt={project.title} className="case-image" />}<div className="case-grid"><section><p className="eyebrow">The problem</p><h2>Context and challenge</h2><p>{project.problem || getLocalizedField(project.description, lang)}</p></section><section><p className="eyebrow">The approach</p><h2>Building the system</h2><p>{project.approach || 'Product design, software engineering and practical delivery adapted to the local operating context.'}</p></section><section><p className="eyebrow">Impact</p><h2>What changed</h2><p>{project.impact || 'A focused digital system designed for real users, maintainability and long-term ownership.'}</p></section></div>{project.project_url && <Button asChild><a href={project.project_url} target="_blank" rel="noreferrer">Visit project <ExternalLink /></a></Button>}</div></article>;
 }
 export function ArticleDetailPage() {
   const { slug } = useParams();
