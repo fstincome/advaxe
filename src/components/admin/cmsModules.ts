@@ -36,10 +36,10 @@ export const CMS_MODULES: CmsModule[] = [
   },
   {
     key: 'articles',
-    label: 'Articles',
+    label: 'Publications',
     table: 'articles',
     entityType: 'article',
-    title: 'Technology & ideas',
+    title: 'Articles, studies & policy briefs',
     baseFields: [
       { name: 'slug', label: 'Slug' },
       { name: 'publication_type', label: 'Type (article / study / policy_brief)' },
@@ -60,7 +60,7 @@ export const CMS_MODULES: CmsModule[] = [
       { name: 'excerpt', label: 'Excerpt', type: 'textarea' },
       { name: 'content', label: 'Content', type: 'textarea' },
     ],
-    defaults: { slug: '', status: 'draft', author: 'Advaxe Ndayisenga', reading_time: 4, featured: false },
+    defaults: { slug: '', status: 'draft', publication_type: 'article', author: 'Advaxe Ndayisenga', reading_time: 4, featured: false },
     orderBy: 'sort_order',
   },
   {
