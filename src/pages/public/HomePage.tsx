@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Code2, DraftingCompass, GitBranch, GraduationCap, Network, Zap } from 'lucide-react';
+import { ArrowRight, BookOpen, Code2, DraftingCompass, ExternalLink, GitBranch, GraduationCap, Network, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -60,4 +60,25 @@ export default function HomePage() {
 
     <section className="contact-cta"><div className="site-shell py-20 text-center"><BookOpen className="mx-auto h-8 w-8 text-primary" /><h2 className="mx-auto mt-5 max-w-3xl text-4xl font-semibold md:text-6xl">{text('contact_title', 'Let’s build something meaningful.')}</h2><p className="mx-auto mt-5 max-w-xl text-muted-foreground">{text('contact_intro', 'For product work, partnerships, speaking, training, open source or Bitcoin and Lightning initiatives.')}</p><Button size="lg" asChild className="mt-8"><Link to={`/${lang}/contact`}>Start a conversation <ArrowRight /></Link></Button></div></section>
   </>;
+}
+
+function FlagshipVenture({ projects, lang }: { projects: ReturnType<typeof useProjects>['data']; lang: string }) {
+  const flagship = (projects ?? []).find((item) => item.featured && item.slug === 'sight-africa') ?? (projects ?? []).filter((item) => item.featured).sort((a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99))[0];
+  if (!flagship) return null;
+  return (
+    <section className="flagship-band"><div className="site-shell section-space">
+      <div className="flagship-card">
+        <div className="flagship-content">
+          <p className="eyebrow">Flagship venture</p>
+          <h2 className="mt-4 text-4xl font-semibold md:text-5xl">{flagship.title}</h2>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">{getLocalizedField(flagship.description, lang)}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {flagship.project_url && <Button size="lg" asChild><a href={flagship.project_url} target="_blank" rel="noreferrer">Visit the venture <ExternalLink /></a></Button>}
+            <Button size="lg" variant="outline" asChild><Link to={`/${lang}/work/${flagship.slug || flagship.id}`}>Read the case <ArrowRight /></Link></Button>
+          </div>
+        </div>
+        <div className="flagship-status"><span className="status-dot" /> {flagship.current_status || 'Active'}<br /><span className="text-muted-foreground">{flagship.role || 'Founder'}</span></div>
+      </div>
+    </div></section>
+  );
 }
