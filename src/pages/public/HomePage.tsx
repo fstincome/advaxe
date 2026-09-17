@@ -44,6 +44,8 @@ export default function HomePage() {
       <Button variant="link" asChild className="mt-8 px-0"><Link to={`/${lang}/expertise`}>View all capabilities <ArrowRight /></Link></Button>
     </div></section>
 
+    <FlagshipVenture projects={projects ?? []} lang={lang} />
+
     <section><div className="site-shell section-space">
       <div className="section-heading"><p className="eyebrow">02 / Work</p><h2>{text('featured_work', 'Selected work')}</h2></div>
       <div className="work-grid">{featured.map((project, index) => <article key={project.id} className={`work-item ${index === 0 ? 'work-item-featured' : ''}`}>
