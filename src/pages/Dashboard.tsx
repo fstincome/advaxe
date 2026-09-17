@@ -244,7 +244,7 @@ const Dashboard = () => {
         {tab === 'services' && <ServicesEditor lang={lang} services={services} queryClient={queryClient} t={t} />}
 
         {/* Projects Tab */}
-        {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} />}
+        {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} lang={lang} />}
 
         {tab === 'files' && <MediaLibrary />}
 
