@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 
 export const useVisitors = () => useQuery({
   queryKey: ['visitors'],
@@ -38,5 +39,5 @@ export const trackClick = async (element: string, page: string) => {
 };
 
 export const logActivity = async (action: string, category: string = 'general', details?: Record<string, unknown>) => {
-  await supabase.from('activity_logs').insert({ action, category, details });
+  await supabase.from('activity_logs').insert({ action, category, details: details as Json | undefined });
 };
