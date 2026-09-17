@@ -5,6 +5,7 @@ import { useLanguage, LANGUAGES, Lang } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnalytics';
 import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
+import { useProjectCategories } from '@/hooks/useProfessionalContent';
 import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home, Menu, LayoutGrid } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
