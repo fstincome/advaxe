@@ -35,6 +35,23 @@ export const CMS_MODULES: CmsModule[] = [
     defaults: { slug: '', icon: 'code', visible: true },
   },
   {
+    key: 'project-categories',
+    label: 'Work categories',
+    table: 'project_categories',
+    entityType: 'project_category',
+    title: 'Work categories',
+    baseFields: [
+      { name: 'slug', label: 'Slug' },
+      { name: 'sort_order', label: 'Order', type: 'number' },
+      { name: 'visible', label: 'Visible', type: 'boolean' },
+    ],
+    translatedFields: [
+      { name: 'name', label: 'Name' },
+      { name: 'description', label: 'Description', type: 'textarea' },
+    ],
+    defaults: { slug: '', visible: true },
+  },
+  {
     key: 'articles',
     label: 'Publications',
     table: 'articles',
