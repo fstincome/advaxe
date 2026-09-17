@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedField, useExperiences, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
-import { useArticles, useExpertise, useProfessionalCollections } from '@/hooks/useProfessionalContent';
+import { useArticles, useCertifications, useExpertise, useProfessionalCollections } from '@/hooks/useProfessionalContent';
 
 const labels: Record<string, { eyebrow: string; title: string; intro: string }> = {
   about: { eyebrow: 'Identity & direction', title: 'A builder shaped by East Africa.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
@@ -37,6 +37,7 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   const { data: experiences } = useExperiences();
   const { data: articles } = useArticles();
   const { data: collections } = useProfessionalCollections();
+  const { data: credentials } = useCertifications();
   const base = labels[type];
   const about = copy?.about;
   const render = () => {
