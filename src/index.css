@@ -328,3 +328,8 @@
 .install-prompt-cta { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.5rem 0.75rem; font-size: 0.8rem; font-weight: 600; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-radius: var(--radius); }
 .install-prompt-close { color: hsl(var(--muted-foreground)); padding: 0.25rem; }
 .install-prompt-close:hover { color: hsl(var(--foreground)); }
+
+/* Content protection: block text/image selection except in form fields */
+body.content-protected { -webkit-user-select: none; user-select: none; }
+body.content-protected input, body.content-protected textarea, body.content-protected select, body.content-protected [contenteditable="true"] { -webkit-user-select: text; user-select: text; }
+body.content-protected img { -webkit-user-drag: none; }
