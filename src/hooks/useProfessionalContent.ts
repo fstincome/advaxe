@@ -50,3 +50,19 @@ export const useProfessionalCollections = () => useQuery({
     return { speaking: speaking.data ?? [], community: community.data ?? [], media: media.data ?? [] };
   },
 });
+export const useCertifications = () => {
+  const { lang } = useLanguage();
+  return useQuery({
+    queryKey: ['certifications', lang],
+    queryFn: async () => {
+      const { data } = await supabase.from('certifications').select('*').eq('status', 'published').order('sort_order');
+      if (!data?.length) return [];
+      const { data: translations } = await supabase.from('content_translations').select('entity_id,field_name,value,lang').eq('entity_type', 'certification').in('entity_id', data.map((item) => item.id)).in('lang', [lang, 'en']);
+      return data.map((item) => ({
+        ...item,
+        ...translationMap(translations?.filter((row) => row.entity_id === item.id && row.lang === 'en') ?? null),
+        ...translationMap(translations?.filter((row) => row.entity_id === item.id && row.lang === lang) ?? null),
+      } as typeof item & TranslationMap));
+    },
+  });
+};

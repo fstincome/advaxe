@@ -29,6 +29,13 @@
       "when": 1789649645485,
       "tag": "0003_article_publication_types",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789651674742,
+      "tag": "0004_create_certifications",
+      "breakpoints": true
     }
   ]
 }
