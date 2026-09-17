@@ -17,7 +17,18 @@ const labels: Record<string, { eyebrow: string; title: string; intro: string }> 
   media: { eyebrow: 'Media', title: 'Conversations, interviews and field notes.', intro: 'Selected recordings, features, publications and moments from the work.' },
 };
 
+export const PUBLICATION_TYPES = [
+  { key: 'all', label: 'All publications', icon: BookOpen },
+  { key: 'article', label: 'Articles', icon: BookOpen },
+  { key: 'study', label: 'Studies', icon: FileText },
+  { key: 'policy_brief', label: 'Policy briefs', icon: ScrollText },
+] as const;
+
+export const publicationLabel = (value?: string | null) =>
+  value === 'study' ? 'Study' : value === 'policy_brief' ? 'Policy brief' : 'Article';
+
 export default function EditorialPage({ type }: { type: keyof typeof labels }) {
+  const [publicationFilter, setPublicationFilter] = useState<string>('all');
   const { lang } = useLanguage();
   const { data: copy } = useSiteContent();
   const { data: expertise } = useExpertise();
