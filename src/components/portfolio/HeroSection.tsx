@@ -15,9 +15,9 @@ const HeroSection = () => {
   const { data: projects } = useProjects();
 
   const name = info?.name || 'Advaxe Ndayisènga';
-  const subtitle = content?.hero_subtitle || 'Software Engineer | Bitcoin Developer | Tech Innovator';
+  const subtitle = content?.hero_subtitle || 'Software Engineer | Full-Stack Developer | Tech Entrepreneur';
   const photoUrl = info?.photo_url || '/advaxe-profile.jpeg';
-  const about = content?.about || "Advaxe Ndayisenga is a seasoned Burundian developer holding a Bachelor's degree in Computer Science. Over 5 years of experience across Lightning, WordPress, Prestashop, social media marketing and SEO audits.";
+  const about = content?.about || "Advaxe Ndayisenga is a Burundian software engineer, full-stack developer, and technology entrepreneur committed to financial inclusion and digital sovereignty in East Africa.";
   const topSkills = (skills && skills.length ? skills : [
     { name: 'React / Next.js', percentage: 90 },
     { name: 'Node.js', percentage: 85 },
