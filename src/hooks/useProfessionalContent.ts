@@ -20,7 +20,7 @@ export const useExpertise = () => {
       return categories.map((category) => {
         const english = translationMap(translations?.filter((row) => row.entity_id === category.id && row.lang === 'en') ?? null);
         const localized = translationMap(translations?.filter((row) => row.entity_id === category.id && row.lang === lang) ?? null);
-        return { ...category, ...english, ...localized };
+        return { ...category, ...english, ...localized } as typeof category & TranslationMap;
       });
     },
   });
@@ -34,7 +34,7 @@ export const useArticles = () => {
       const { data } = await supabase.from('articles').select('*').eq('status', 'published').order('published_at', { ascending: false });
       if (!data?.length) return [];
       const { data: translations } = await supabase.from('content_translations').select('entity_id,field_name,value,lang').eq('entity_type', 'article').in('entity_id', data.map((item) => item.id)).in('lang', [lang, 'en']);
-      return data.map((article) => ({ ...article, ...translationMap(translations?.filter((row) => row.entity_id === article.id && row.lang === 'en') ?? null), ...translationMap(translations?.filter((row) => row.entity_id === article.id && row.lang === lang) ?? null) }));
+      return data.map((article) => ({ ...article, ...translationMap(translations?.filter((row) => row.entity_id === article.id && row.lang === 'en') ?? null), ...translationMap(translations?.filter((row) => row.entity_id === article.id && row.lang === lang) ?? null) } as typeof article & TranslationMap));
     },
   });
 };

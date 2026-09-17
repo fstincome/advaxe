@@ -7,13 +7,16 @@ import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnaly
 import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
 import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import CollectionManager from '@/components/admin/CollectionManager';
+import MessagesInbox from '@/components/admin/MessagesInbox';
+import { CMS_MODULES } from '@/components/admin/cmsModules';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
   const { dark, toggle } = useTheme();
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<'analytics' | 'content' | 'experiences' | 'skills' | 'services' | 'projects'>('analytics');
+  const [tab, setTab] = useState<string>('analytics');
   const [user, setUser] = useState<any>(null);
 
   const { data: visitors } = useVisitors();
@@ -64,6 +67,8 @@ const Dashboard = () => {
     { key: 'skills' as const, icon: BarChart3, label: t('skills') },
     { key: 'services' as const, icon: Settings, label: t('services') },
     { key: 'projects' as const, icon: MousePointer, label: t('projects') },
+    ...CMS_MODULES.map((module) => ({ key: module.key, icon: Settings, label: module.label })),
+    { key: 'messages', icon: Activity, label: 'Messages' },
   ];
 
   if (!user) return null;
@@ -223,6 +228,14 @@ const Dashboard = () => {
 
         {/* Projects Tab */}
         {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} />}
+
+        {tab === 'messages' && <MessagesInbox />}
+
+        {CMS_MODULES.filter((module) => module.key === tab).map((module) => (
+          <CollectionManager key={module.key} table={module.table} entityType={module.entityType} title={module.title}
+            baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
+            orderBy={module.orderBy} ascending={module.ascending} />
+        ))}
       </div>
     </div>
   );

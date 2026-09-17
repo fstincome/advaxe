@@ -34,7 +34,7 @@
     --border: 263 20% 92%;
     --input: 263 20% 92%;
     --ring: 16 100% 60%;
-    --radius: 1.25rem;
+    --radius: 0.25rem;
 
     --sidebar-background: 30 100% 98%;
     --sidebar-foreground: 263 20% 20%;
@@ -181,6 +181,95 @@
     @apply px-2 py-1 text-xs rounded-md bg-secondary text-secondary-foreground cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors;
   }
   .lang-badge-active { @apply bg-primary text-primary-foreground; }
+
+  /* ---------- Editorial professional system ---------- */
+  .site-shell { @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8; }
+  .site-header {
+    @apply sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md;
+  }
+  .brand-mark {
+    @apply flex h-9 w-9 items-center justify-center bg-foreground font-display text-sm font-bold text-background;
+  }
+  .eyebrow {
+    @apply font-display text-xs font-medium uppercase tracking-[0.22em] text-primary;
+  }
+  .section-space { @apply py-20 md:py-28; }
+  .section-heading { @apply mb-12 max-w-3xl; }
+  .section-heading h2 { @apply mt-4 text-3xl font-semibold leading-tight md:text-5xl; }
+  .section-band { @apply border-y border-border bg-secondary/40; }
+  .hero-section { @apply relative overflow-hidden; }
+  .hero-section::before {
+    content: '';
+    @apply pointer-events-none absolute inset-0 opacity-[0.55];
+    background-image:
+      linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 88px 88px;
+    mask-image: radial-gradient(circle at 70% 30%, black, transparent 70%);
+  }
+  .hero-section > * { @apply relative; }
+  .portrait-frame {
+    @apply aspect-[4/5] w-full overflow-hidden border border-border bg-secondary;
+  }
+  .technical-note {
+    @apply mt-4 border-l-2 border-primary pl-4 font-mono text-xs leading-5;
+  }
+  .status-dot {
+    @apply mr-2 inline-block h-2 w-2 rounded-full bg-primary;
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.2);
+  }
+  .dimension {
+    @apply flex items-center gap-3 border-border px-2 py-5 text-sm font-medium sm:border-r sm:last:border-r-0;
+  }
+  .dimension svg { @apply h-4 w-4 text-primary; }
+
+  .expertise-grid { @apply grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3; }
+  .expertise-item { @apply bg-background p-8; }
+  .expertise-item span { @apply font-mono text-xs text-primary; }
+  .expertise-item h3 { @apply mt-4 text-xl font-semibold; }
+  .expertise-item p { @apply mt-3 text-sm leading-6 text-muted-foreground; }
+
+  .work-grid { @apply grid gap-8 md:grid-cols-2; }
+  .work-item { @apply border border-border bg-card transition-colors hover:border-primary/50; }
+  .work-item-featured { @apply md:col-span-2; }
+  .work-visual { @apply flex aspect-[16/9] items-center justify-center overflow-hidden bg-secondary; }
+  .work-visual img { @apply h-full w-full object-cover; }
+  .work-list { @apply divide-y divide-border border-y border-border; }
+  .work-row { @apply grid gap-4 py-8 md:grid-cols-[1fr_2fr] md:items-baseline; }
+
+  .belief-band { @apply border-y border-border bg-secondary/40; }
+  .journey-line { @apply grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3; }
+  .journey-point { @apply flex flex-col gap-1 bg-background p-6; }
+  .journey-point span { @apply font-mono text-xs text-primary; }
+  .journey-point strong { @apply text-base font-semibold; }
+  .journey-point small { @apply text-sm text-muted-foreground; }
+
+  .page-section { @apply site-shell py-16 md:py-24; }
+  .page-intro { @apply max-w-3xl; }
+  .page-intro h1 { @apply mt-4 text-4xl font-semibold leading-tight md:text-6xl; }
+  .page-intro p { @apply mt-6 text-lg leading-8 text-muted-foreground; }
+  .editorial-copy { @apply max-w-3xl space-y-5 text-base leading-8 text-muted-foreground; }
+
+  .timeline { @apply border-l border-border pl-6; }
+  .timeline-row { @apply relative pb-10; }
+  .timeline-row::before {
+    content: '';
+    @apply absolute -left-[1.68rem] top-2 h-2 w-2 rounded-full bg-primary;
+  }
+  .timeline-year { @apply font-mono text-xs text-primary; }
+
+  .article-grid { @apply grid gap-px border border-border bg-border md:grid-cols-2; }
+  .article-item { @apply bg-background p-8; }
+  .case-image { @apply w-full border border-border object-cover; }
+  .case-grid { @apply grid gap-10 md:grid-cols-2; }
+
+  .contact-cta { @apply border-t border-border bg-secondary/40; }
+  .contact-layout { @apply grid gap-12 md:grid-cols-[1.1fr_.9fr]; }
+  .contact-form { @apply space-y-4; }
+  .contact-form input, .contact-form textarea {
+    @apply w-full border border-input bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary;
+  }
+  .empty-state { @apply border border-dashed border-border p-10 text-center text-sm text-muted-foreground; }
 }
 
 @layer utilities {
