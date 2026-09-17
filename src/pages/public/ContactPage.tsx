@@ -1,0 +1,14 @@
+import { useState } from 'react';
+import { Mail, Send } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { usePersonalInfo, useSiteContent } from '@/hooks/usePortfolioData';
+import { toast } from 'sonner';
+
+export default function ContactPage() {
+  const { lang } = useLanguage(); const { data: copy } = useSiteContent(); const { data: info } = usePersonalInfo();
+  const [form, setForm] = useState({ name: '', email: '', inquiry_type: 'project', subject: '', message: '' }); const [sending, setSending] = useState(false);
+  const submit = async (event: React.FormEvent) => { event.preventDefault(); setSending(true); const { error } = await supabase.from('contact_messages').insert({ ...form, lang }); setSending(false); if (error) return toast.error('Unable to send your message.'); toast.success('Message sent.'); setForm({ name: '', email: '', inquiry_type: 'project', subject: '', message: '' }); };
+  return <section className="page-section"><div className="site-shell"><header className="page-intro"><p className="eyebrow">Contact</p><h1>{copy?.contact_title || 'Let’s build something meaningful.'}</h1><p>{copy?.contact_intro}</p></header><div className="contact-layout"><div><Mail className="h-6 w-6 text-primary" /><a className="mt-5 block text-xl font-medium" href={`mailto:${info?.email || 'advaxe.mucatcha@gmail.com'}`}>{info?.email || 'advaxe.mucatcha@gmail.com'}</a><p className="mt-3 text-muted-foreground">Gitega, Burundi · Available for selected global collaborations.</p></div><form className="contact-form" onSubmit={submit}><div className="grid gap-5 sm:grid-cols-2"><label>Name<input required minLength={2} maxLength={100} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label><label>Email<input required type="email" maxLength={254} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label></div><label>Inquiry<select value={form.inquiry_type} onChange={(e) => setForm({ ...form, inquiry_type: e.target.value })}><option value="project">Product / project</option><option value="partnership">Partnership</option><option value="speaking">Speaking</option><option value="training">Training</option><option value="bitcoin">Bitcoin / Lightning</option><option value="media">Media</option></select></label><label>Subject<input maxLength={180} value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} /></label><label>Message<textarea required minLength={10} maxLength={5000} rows={7} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></label><Button type="submit" size="lg" disabled={sending}>{sending ? 'Sending…' : copy?.send_message || 'Send inquiry'}<Send /></Button></form></div></div></section>;
+}
