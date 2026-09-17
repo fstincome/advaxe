@@ -15,6 +15,13 @@
       "when": 1789642039170,
       "tag": "0001_secure_analytics_and_expand_content",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789649410827,
+      "tag": "0002_media_uploads_policies",
+      "breakpoints": true
     }
   ]
 }

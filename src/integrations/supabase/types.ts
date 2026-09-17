@@ -470,6 +470,7 @@ export type Database = {
           file_size: number
           id: string
           mime_type: string
+          public_url: string | null
           storage_path: string
           uploaded_by: string | null
         }
@@ -480,6 +481,7 @@ export type Database = {
           file_size?: number
           id?: string
           mime_type: string
+          public_url?: string | null
           storage_path: string
           uploaded_by?: string | null
         }
@@ -490,6 +492,7 @@ export type Database = {
           file_size?: number
           id?: string
           mime_type?: string
+          public_url?: string | null
           storage_path?: string
           uploaded_by?: string | null
         }

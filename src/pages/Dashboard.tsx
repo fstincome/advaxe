@@ -9,6 +9,7 @@ import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Set
 import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
 import MessagesInbox from '@/components/admin/MessagesInbox';
+import MediaLibrary from '@/components/admin/MediaLibrary';
 import { CMS_MODULES } from '@/components/admin/cmsModules';
 
 const Dashboard = () => {
@@ -68,6 +69,7 @@ const Dashboard = () => {
     { key: 'services' as const, icon: Settings, label: t('services') },
     { key: 'projects' as const, icon: MousePointer, label: t('projects') },
     ...CMS_MODULES.map((module) => ({ key: module.key, icon: Settings, label: module.label })),
+    { key: 'files', icon: Settings, label: 'Fichiers' },
     { key: 'messages', icon: Activity, label: 'Messages' },
   ];
 
@@ -228,6 +230,8 @@ const Dashboard = () => {
 
         {/* Projects Tab */}
         {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} />}
+
+        {tab === 'files' && <MediaLibrary />}
 
         {tab === 'messages' && <MessagesInbox />}
 

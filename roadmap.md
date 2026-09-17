@@ -7,4 +7,4 @@
 - [x] Rebuild admin as a multilingual CMS (expertise, articles, speaking, community, media, pages/SEO, messages)
 - [x] Migrate/preserve current useful content
 - [x] Validate desktop/mobile, auth, forms, and database security
-- [ ] Media library with file uploads (blocked: public storage buckets are not allowed; needs a private bucket + signed links)
+- [x] Media library with file uploads (private bucket + signed links, 3 MB max)
