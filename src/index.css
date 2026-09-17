@@ -214,6 +214,18 @@
   .portrait-frame {
     @apply aspect-[4/5] w-full overflow-hidden border border-border bg-secondary;
   }
+  .about-layout {
+    @apply grid gap-10 lg:grid-cols-[320px_1fr] lg:items-start;
+  }
+  .about-portrait {
+    @apply overflow-hidden border border-border bg-secondary;
+  }
+  .about-portrait img {
+    @apply aspect-[4/5] w-full object-cover;
+  }
+  .about-portrait figcaption {
+    @apply border-t border-border px-4 py-3 font-mono text-xs text-muted-foreground;
+  }
   .technical-note {
     @apply mt-4 border-l-2 border-primary pl-4 font-mono text-xs leading-5;
   }
