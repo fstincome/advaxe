@@ -77,8 +77,10 @@ export type Database = {
           category: string | null
           cover_image_url: string | null
           created_at: string
+          document_url: string | null
           featured: boolean
           id: string
+          publication_type: string
           published_at: string | null
           reading_time: number
           seo_description: string | null
@@ -93,8 +95,10 @@ export type Database = {
           category?: string | null
           cover_image_url?: string | null
           created_at?: string
+          document_url?: string | null
           featured?: boolean
           id?: string
+          publication_type?: string
           published_at?: string | null
           reading_time?: number
           seo_description?: string | null
@@ -109,8 +113,10 @@ export type Database = {
           category?: string | null
           cover_image_url?: string | null
           created_at?: string
+          document_url?: string | null
           featured?: boolean
           id?: string
+          publication_type?: string
           published_at?: string | null
           reading_time?: number
           seo_description?: string | null

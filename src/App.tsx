@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import SiteLayout from "./components/site/SiteLayout";
 import HomePage from "./pages/public/HomePage";
-import EditorialPage, { WorkDetailPage } from "./pages/public/EditorialPage";
+import EditorialPage, { ArticleDetailPage, WorkDetailPage } from "./pages/public/EditorialPage";
 import ContactPage from "./pages/public/ContactPage";
 import RequireAdmin from "./components/admin/RequireAdmin";
 
@@ -35,6 +35,7 @@ const App = () => (
                 <Route path="work" element={<EditorialPage type="work" />} />
                 <Route path="work/:slug" element={<WorkDetailPage />} />
                 <Route path="ideas" element={<EditorialPage type="ideas" />} />
+                <Route path="ideas/:slug" element={<ArticleDetailPage />} />
                 <Route path="experience" element={<EditorialPage type="experience" />} />
                 <Route path="speaking" element={<EditorialPage type="speaking" />} />
                 <Route path="community" element={<EditorialPage type="community" />} />
