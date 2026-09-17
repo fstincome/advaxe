@@ -20,7 +20,7 @@ export const useExpertise = () => {
       return categories.map((category) => {
         const english = translationMap(translations?.filter((row) => row.entity_id === category.id && row.lang === 'en') ?? null);
         const localized = translationMap(translations?.filter((row) => row.entity_id === category.id && row.lang === lang) ?? null);
-        return { ...category, ...english, ...localized };
+        return { ...category, ...english, ...localized } as typeof category & TranslationMap;
       });
     },
   });
