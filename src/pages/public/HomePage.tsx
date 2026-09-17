@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Code2, DraftingCompass, Github, GraduationCap, Network, Zap } from 'lucide-react';
+import { ArrowRight, BookOpen, Code2, DraftingCompass, GitBranch, GraduationCap, Network, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -7,7 +7,7 @@ import { useExpertise } from '@/hooks/useProfessionalContent';
 
 const dimensions = [
   { label: 'Build', icon: Code2 }, { label: 'Design', icon: DraftingCompass }, { label: 'Teach', icon: GraduationCap },
-  { label: 'Contribute', icon: Github }, { label: 'Explore', icon: Network },
+  { label: 'Contribute', icon: GitBranch }, { label: 'Explore', icon: Network },
 ];
 
 export default function HomePage() {
