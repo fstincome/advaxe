@@ -266,6 +266,10 @@
   .case-image { @apply w-full border border-border object-cover; }
   .case-grid { @apply grid gap-10 md:grid-cols-2; }
 
+  .flagship-band { @apply border-y border-border bg-secondary/30; }
+  .flagship-card { @apply grid gap-8 md:grid-cols-[1fr_auto] md:items-end; }
+  .flagship-content h2 { @apply leading-tight; }
+  .flagship-status { @apply font-mono text-sm; }
   .contact-cta { @apply border-t border-border bg-secondary/40; }
   .contact-layout { @apply grid gap-12 md:grid-cols-[1.1fr_.9fr]; }
   .contact-form { @apply space-y-4; }
