@@ -35,6 +35,7 @@ const App = () => (
                 <Route path="work" element={<EditorialPage type="work" />} />
                 <Route path="work/:slug" element={<WorkDetailPage />} />
                 <Route path="ideas" element={<EditorialPage type="ideas" />} />
+                <Route path="ideas/:slug" element={<ArticleDetailPage />} />
                 <Route path="experience" element={<EditorialPage type="experience" />} />
                 <Route path="speaking" element={<EditorialPage type="speaking" />} />
                 <Route path="community" element={<EditorialPage type="community" />} />
