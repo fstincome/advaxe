@@ -110,7 +110,7 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
     const Icon = type === 'speaking' ? Mic2 : type === 'community' ? Network : PlayCircle;
     return collection?.length ? <div className="article-grid">{collection.map((item: Record<string, unknown>) => <article className="article-item" key={String(item.id)}><Icon /><p className="eyebrow">{String(item.organization || item.publisher || item.event_type || '')}</p><h2>{String(item.role || item.slug || '')}</h2>{item.external_url ? <a href={String(item.external_url)} target="_blank" rel="noreferrer">Open resource <ExternalLink /></a> : null}</article>)}</div> : <EmptyState icon={Icon} text="Selected entries will appear here as they are published from the dashboard." />;
   };
-  return <section className="page-section"><div className="site-shell"><header className="page-intro"><p className="eyebrow">{base.eyebrow}</p><h1>{base.title}</h1><p>{type === 'about' && about ? about.slice(0, 340) : base.intro}</p></header>{render()}</div></section>;
+  return <section className="page-section"><div className="site-shell"><header className="page-intro"><p className="eyebrow">{base.eyebrow}</p><h1>{base.title}</h1><p>{base.intro}</p></header>{render()}</div></section>;
 }
 
 function EmptyState({ icon: Icon, text }: { icon: typeof BookOpen; text: string }) {
