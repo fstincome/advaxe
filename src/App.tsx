@@ -13,6 +13,7 @@ import HomePage from "./pages/public/HomePage";
 import EditorialPage, { ArticleDetailPage, WorkDetailPage } from "./pages/public/EditorialPage";
 import ContactPage from "./pages/public/ContactPage";
 import RequireAdmin from "./components/admin/RequireAdmin";
+import ContentProtection from "./components/site/ContentProtection";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          <ContentProtection />
             <Routes>
               <Route path="/" element={<Navigate to="/en" replace />} />
               <Route path="/auth" element={<Auth />} />
