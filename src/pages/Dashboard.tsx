@@ -563,7 +563,7 @@ const ProjectsEditor = ({ projects, queryClient, t, lang }: any) => {
   };
 
   const save = async (item: any) => {
-    const payload: Record<string, unknown> = {
+    const payload: any = {
       slug: item.slug || null,
       title: item.title,
       category: item.category,
@@ -585,7 +585,7 @@ const ProjectsEditor = ({ projects, queryClient, t, lang }: any) => {
     if (item.id && !String(item.id).startsWith('new-')) {
       await supabase.from('projects').update(payload).eq('id', item.id);
     } else {
-      await supabase.from('projects').insert(payload as any);
+      await supabase.from('projects').insert(payload);
     }
     queryClient.invalidateQueries({ queryKey: ['projects'] });
   };
