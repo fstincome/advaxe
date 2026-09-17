@@ -283,9 +283,13 @@
   .flagship-content h2 { @apply leading-tight; }
   .flagship-status { @apply font-mono text-sm; }
   .contact-cta { @apply border-t border-border bg-secondary/40; }
-  .contact-layout { @apply grid gap-12 md:grid-cols-[1.1fr_.9fr]; }
+  .contact-layout { @apply grid gap-12 md:grid-cols-[1fr_1fr]; }
+  .contact-details { @apply space-y-4; }
+  .contact-card { @apply flex items-start gap-4 border border-border bg-secondary/30 p-5; }
+  .contact-card .eyebrow { @apply text-[11px]; }
+  .contact-pill { @apply inline-flex items-center gap-1.5 border border-border bg-background px-3 py-1.5 text-xs font-medium uppercase tracking-wide transition-colors hover:border-primary hover:text-primary; }
   .contact-form { @apply space-y-4; }
-  .contact-form input, .contact-form textarea {
+  .contact-form input, .contact-form textarea, .contact-form select {
     @apply w-full border border-input bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary;
   }
   .empty-state { @apply border border-dashed border-border p-10 text-center text-sm text-muted-foreground; }
