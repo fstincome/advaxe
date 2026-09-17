@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import SiteLayout from "./components/site/SiteLayout";
 import HomePage from "./pages/public/HomePage";
-import EditorialPage, { WorkDetailPage } from "./pages/public/EditorialPage";
+import EditorialPage, { ArticleDetailPage, WorkDetailPage } from "./pages/public/EditorialPage";
 import ContactPage from "./pages/public/ContactPage";
 import RequireAdmin from "./components/admin/RequireAdmin";
 
