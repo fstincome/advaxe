@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
 import MessagesInbox from '@/components/admin/MessagesInbox';
 import MediaLibrary from '@/components/admin/MediaLibrary';
+import MediaPicker from '@/components/admin/MediaPicker';
 import { CMS_MODULES } from '@/components/admin/cmsModules';
 
 const Dashboard = () => {
@@ -310,8 +311,12 @@ const ContentEditor = ({ lang, content, personalInfo, queryClient, t }: any) => 
           {infoFields.map(key => (
             <div key={key}>
               <label className="text-sm text-muted-foreground capitalize">{key.replace('_', ' ')}</label>
-              <input value={infoForm[key] || ''} onChange={e => setInfoForm({ ...infoForm, [key]: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none mt-1" />
+              {key.endsWith('_url') ? (
+                <div className="mt-1"><MediaPicker value={infoForm[key] || ''} onChange={(url) => setInfoForm({ ...infoForm, [key]: url })} /></div>
+              ) : (
+                <input value={infoForm[key] || ''} onChange={e => setInfoForm({ ...infoForm, [key]: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none mt-1" />
+              )}
               <button onClick={() => saveInfo(key, infoForm[key] || '')} className="text-xs text-primary mt-1 hover:underline">{t('save')}</button>
             </div>
           ))}
@@ -338,7 +343,7 @@ const ExperiencesEditor = ({ lang, experiences, queryClient, t }: any) => {
     if (item.id && !item.id.startsWith('new-')) {
       await supabase.from('experiences').update({
         title: item.title, company: item.company, company_url: item.company_url,
-        period: item.period, description: item.description, sort_order: item.sort_order
+        period: item.period, description: item.description, sort_order: item.sort_order, logo_url: item.logo_url
       }).eq('id', item.id);
     } else {
       const { id, ...rest } = item;
@@ -395,6 +400,10 @@ const ExperiencesEditor = ({ lang, experiences, queryClient, t }: any) => {
               <label className="text-xs text-muted-foreground">URL</label>
               <input value={item.company_url || ''} onChange={e => update(i, 'company_url', e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Logo</label>
+              <MediaPicker value={item.logo_url || ''} onChange={(url) => update(i, 'logo_url', url)} />
             </div>
           </div>
           <div>
@@ -555,8 +564,10 @@ const ProjectsEditor = ({ projects, queryClient, t }: any) => {
               <option value="tech">Tech</option>
               <option value="bitcoin">Bitcoin</option>
             </select>
-            <input value={item.image_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], image_url: e.target.value }; setItems(c); }}
-              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Image URL" />
+            <div>
+              <label className="text-xs text-muted-foreground">Image</label>
+              <MediaPicker value={item.image_url || ''} onChange={(url) => { const c = [...items]; c[i] = { ...c[i], image_url: url }; setItems(c); }} />
+            </div>
             <input value={item.project_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], project_url: e.target.value }; setItems(c); }}
               className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Project URL" />
           </div>
