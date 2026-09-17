@@ -7,6 +7,9 @@ import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnaly
 import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
 import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import CollectionManager from '@/components/admin/CollectionManager';
+import MessagesInbox from '@/components/admin/MessagesInbox';
+import { CMS_MODULES } from '@/components/admin/cmsModules';
 
 const Dashboard = () => {
   const navigate = useNavigate();
