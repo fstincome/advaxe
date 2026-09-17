@@ -560,8 +560,10 @@ const ProjectsEditor = ({ projects, queryClient, t }: any) => {
               <option value="tech">Tech</option>
               <option value="bitcoin">Bitcoin</option>
             </select>
-            <input value={item.image_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], image_url: e.target.value }; setItems(c); }}
-              className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Image URL" />
+            <div>
+              <label className="text-xs text-muted-foreground">Image</label>
+              <MediaPicker value={item.image_url || ''} onChange={(url) => { const c = [...items]; c[i] = { ...c[i], image_url: url }; setItems(c); }} />
+            </div>
             <input value={item.project_url || ''} onChange={e => { const c = [...items]; c[i] = { ...c[i], project_url: e.target.value }; setItems(c); }}
               className="px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" placeholder="Project URL" />
           </div>
