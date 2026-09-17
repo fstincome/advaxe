@@ -53,11 +53,33 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   };
   const base = labels[type];
   const about = copy?.about;
+  const linkifyBio = (text: string) => {
+    const links: Record<string, string> = { 'SIGHT Africa': 'https://www.sightnetwork.org/', 'BitLibera': 'https://bitlibera.com' };
+    const terms = Object.keys(links).sort((a, b) => b.length - a.length);
+    let parts: (string | { label: string; href: string })[] = [text];
+    for (const term of terms) {
+      parts = parts.flatMap((part) => (typeof part === 'string' ? splitTerm(part, term, links[term]) : [part]));
+    }
+    return parts.map((part, i) => typeof part === 'string' ? part : <a key={i} href={part.href} target="_blank" rel="noreferrer">{part.label}</a>);
+  };
+  const splitTerm = (text: string, term: string, href: string): (string | { label: string; href: string })[] => {
+    const out: (string | { label: string; href: string })[] = [];
+    let rest = text;
+    let idx = rest.indexOf(term);
+    while (idx !== -1) {
+      if (idx > 0) out.push(rest.slice(0, idx));
+      out.push({ label: term, href });
+      rest = rest.slice(idx + term.length);
+      idx = rest.indexOf(term);
+    }
+    if (rest) out.push(rest);
+    return out;
+  };
   const render = () => {
     if (type === 'about') {
       const bio = (about || base.intro) as string;
       const paragraphs = bio.split(/\n{2,}/).filter(Boolean);
-      return <div className="about-layout"><figure className="about-portrait"><img src="/advaxe-profile.jpeg" alt="Advaxe Ndayisenga, software engineer and technology entrepreneur" loading="lazy" /><figcaption>Advaxe Ndayisenga, Gitega, Burundi</figcaption></figure><div className="editorial-copy">{paragraphs.length ? paragraphs.map((text, i) => <p key={i}>{text}</p>) : <p>{base.intro}</p>}</div></div>;
+      return <div className="about-layout"><figure className="about-portrait"><img src="/advaxe-profile.jpeg" alt="Advaxe Ndayisenga, software engineer and technology entrepreneur" loading="lazy" /><figcaption>Advaxe Ndayisenga, Gitega, Burundi</figcaption></figure><div className="editorial-copy">{paragraphs.length ? paragraphs.map((text, i) => <p key={i}>{linkifyBio(text)}</p>) : <p>{base.intro}</p>}</div></div>;
     }
     if (type === 'expertise') return <div className="expertise-grid">{expertise?.map((item, index) => <article className="expertise-item" key={item.id}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>;
     if (type === 'work') return <div className="work-list">{projects?.map((item) => <article key={item.id} className="work-row"><div><p className="eyebrow">{categoryName(item.category)}</p><h2>{item.title}</h2><p>{getLocalizedField(item.description, lang)}</p></div><Button variant="outline" asChild><Link to={`/${lang}/work/${item.slug || item.id}`}>Case study <ArrowRight /></Link></Button></article>)}</div>;
