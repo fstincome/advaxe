@@ -21,7 +21,7 @@ export default function HomePage() {
   const featured = (projects ?? []).filter((item) => item.featured || item.status === 'published').slice(0, 3);
   return <>
     <section className="hero-section">
-      <div className="site-shell grid min-h-[calc(100svh-5rem)] items-center gap-12 py-16 lg:grid-cols-[1.25fr_.75fr]">
+      <div className="site-shell grid items-center gap-12 pb-0 pt-14 md:pt-20 lg:grid-cols-[1.25fr_.75fr]">
         <div className="max-w-4xl animate-slide-up">
           <p className="eyebrow">{text('hero_eyebrow', 'Software architect · Builder · Educator')}</p>
           <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-[1.04] sm:text-6xl lg:text-7xl">{text('hero_title', 'Building technology, open infrastructure and digital experiences for real-world impact.')}</h1>
