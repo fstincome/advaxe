@@ -1,7 +1,7 @@
 import { ArrowRight, BookOpen, Code2, DraftingCompass, ExternalLink, GitBranch, GraduationCap, Network, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, Lang } from '@/contexts/LanguageContext';
 import { getLocalizedField, useExperiences, usePersonalInfo, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
 import { useExpertise } from '@/hooks/useProfessionalContent';
 
