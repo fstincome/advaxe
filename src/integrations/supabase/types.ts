@@ -74,12 +74,15 @@ export type Database = {
       articles: {
         Row: {
           author: string
+          category: string | null
           cover_image_url: string | null
           created_at: string
           featured: boolean
           id: string
           published_at: string | null
           reading_time: number
+          seo_description: string | null
+          seo_title: string | null
           slug: string
           sort_order: number
           status: string
@@ -87,12 +90,15 @@ export type Database = {
         }
         Insert: {
           author?: string
+          category?: string | null
           cover_image_url?: string | null
           created_at?: string
           featured?: boolean
           id?: string
           published_at?: string | null
           reading_time?: number
+          seo_description?: string | null
+          seo_title?: string | null
           slug: string
           sort_order?: number
           status?: string
@@ -100,16 +106,49 @@ export type Database = {
         }
         Update: {
           author?: string
+          category?: string | null
           cover_image_url?: string | null
           created_at?: string
           featured?: boolean
           id?: string
           published_at?: string | null
           reading_time?: number
+          seo_description?: string | null
+          seo_title?: string | null
           slug?: string
           sort_order?: number
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          metadata: Json
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          metadata?: Json
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          metadata?: Json
         }
         Relationships: []
       }
@@ -379,6 +418,7 @@ export type Database = {
         Row: {
           appearance_date: string | null
           created_at: string
+          duration: string | null
           external_url: string
           featured: boolean
           id: string
@@ -393,6 +433,7 @@ export type Database = {
         Insert: {
           appearance_date?: string | null
           created_at?: string
+          duration?: string | null
           external_url: string
           featured?: boolean
           id?: string
@@ -407,6 +448,7 @@ export type Database = {
         Update: {
           appearance_date?: string | null
           created_at?: string
+          duration?: string | null
           external_url?: string
           featured?: boolean
           id?: string
@@ -455,9 +497,13 @@ export type Database = {
       }
       pages: {
         Row: {
+          canonical_url: string | null
           created_at: string
           id: string
+          og_image_url: string | null
           page_key: string
+          seo_description: string | null
+          seo_title: string | null
           slug: string
           sort_order: number
           status: string
@@ -465,9 +511,13 @@ export type Database = {
           visible: boolean
         }
         Insert: {
+          canonical_url?: string | null
           created_at?: string
           id?: string
+          og_image_url?: string | null
           page_key: string
+          seo_description?: string | null
+          seo_title?: string | null
           slug: string
           sort_order?: number
           status?: string
@@ -475,9 +525,13 @@ export type Database = {
           visible?: boolean
         }
         Update: {
+          canonical_url?: string | null
           created_at?: string
           id?: string
+          og_image_url?: string | null
           page_key?: string
+          seo_description?: string | null
+          seo_title?: string | null
           slug?: string
           sort_order?: number
           status?: string
@@ -504,6 +558,30 @@ export type Database = {
           info_key?: string
           updated_at?: string | null
           value?: string
+        }
+        Relationships: []
+      }
+      project_categories: {
+        Row: {
+          created_at: string
+          id: string
+          slug: string
+          sort_order: number
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          slug: string
+          sort_order?: number
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          slug?: string
+          sort_order?: number
+          visible?: boolean
         }
         Relationships: []
       }
@@ -539,6 +617,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          approach: string | null
           category: string | null
           created_at: string
           current_status: string | null
@@ -548,7 +627,11 @@ export type Database = {
           github_url: string | null
           id: string
           image_url: string | null
+          impact: string | null
+          problem: string | null
           project_url: string | null
+          project_year: number | null
+          role: string | null
           slug: string | null
           sort_order: number | null
           status: string
@@ -556,6 +639,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approach?: string | null
           category?: string | null
           created_at?: string
           current_status?: string | null
@@ -565,7 +649,11 @@ export type Database = {
           github_url?: string | null
           id?: string
           image_url?: string | null
+          impact?: string | null
+          problem?: string | null
           project_url?: string | null
+          project_year?: number | null
+          role?: string | null
           slug?: string | null
           sort_order?: number | null
           status?: string
@@ -573,6 +661,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approach?: string | null
           category?: string | null
           created_at?: string
           current_status?: string | null
@@ -582,7 +671,11 @@ export type Database = {
           github_url?: string | null
           id?: string
           image_url?: string | null
+          impact?: string | null
+          problem?: string | null
           project_url?: string | null
+          project_year?: number | null
+          role?: string | null
           slug?: string | null
           sort_order?: number | null
           status?: string
@@ -712,6 +805,7 @@ export type Database = {
         Row: {
           created_at: string
           event_date: string
+          event_type: string
           external_url: string | null
           id: string
           image_url: string | null
@@ -727,6 +821,7 @@ export type Database = {
         Insert: {
           created_at?: string
           event_date: string
+          event_type?: string
           external_url?: string | null
           id?: string
           image_url?: string | null
@@ -742,6 +837,7 @@ export type Database = {
         Update: {
           created_at?: string
           event_date?: string
+          event_type?: string
           external_url?: string | null
           id?: string
           image_url?: string | null
