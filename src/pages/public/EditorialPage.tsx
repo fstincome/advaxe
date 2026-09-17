@@ -43,7 +43,35 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
     if (type === 'expertise') return <div className="expertise-grid">{expertise?.map((item, index) => <article className="expertise-item" key={item.id}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>;
     if (type === 'work') return <div className="work-list">{projects?.map((item) => <article key={item.id} className="work-row"><div><p className="eyebrow">{item.category}</p><h2>{item.title}</h2><p>{getLocalizedField(item.description, lang)}</p></div><Button variant="outline" asChild><Link to={`/${lang}/work/${item.slug || item.id}`}>Case study <ArrowRight /></Link></Button></article>)}</div>;
     if (type === 'experience') return <div className="timeline">{experiences?.map((item) => <article key={item.id} className="timeline-row"><div className="timeline-year">{item.period}</div><div><p className="eyebrow">{item.company}</p><h2>{getLocalizedField(item.title, lang)}</h2><p>{getLocalizedField(item.description, lang)}</p></div></article>)}</div>;
-    if (type === 'ideas') return articles?.length ? <div className="article-grid">{articles.map((item) => <article key={item.id} className="article-item"><BookOpen /><p className="eyebrow">{item.category}</p><h2>{item.title}</h2><p>{item.excerpt}</p><Link to={`/${lang}/ideas/${item.slug}`}>Read article <ArrowRight /></Link></article>)}</div> : <EmptyState icon={BookOpen} text="Long-form articles and technical field notes are being prepared." />;
+    if (type === 'ideas') {
+      const filtered = (articles ?? []).filter((item) => publicationFilter === 'all' || (item.publication_type ?? 'article') === publicationFilter);
+      return (
+        <div className="space-y-8">
+          <div className="flex flex-wrap gap-2">
+            {PUBLICATION_TYPES.map(({ key, label }) => (
+              <button key={key} onClick={() => setPublicationFilter(key)}
+                className={`pill-tab ${publicationFilter === key ? 'pill-tab-active' : ''}`}>{label}</button>
+            ))}
+          </div>
+          {filtered.length ? (
+            <div className="article-grid">
+              {filtered.map((item) => {
+                const Icon = (item.publication_type ?? 'article') === 'study' ? FileText : (item.publication_type === 'policy_brief' ? ScrollText : BookOpen);
+                return (
+                  <article key={item.id} className="article-item">
+                    <Icon />
+                    <p className="eyebrow">{publicationLabel(item.publication_type)}{item.category ? ` · ${item.category}` : ''}</p>
+                    <h2>{item.title}</h2>
+                    <p>{item.excerpt}</p>
+                    <Link to={`/${lang}/ideas/${item.slug}`}>Read <ArrowRight /></Link>
+                  </article>
+                );
+              })}
+            </div>
+          ) : <EmptyState icon={BookOpen} text="Articles, studies and policy briefs will appear here as they are published." />}
+        </div>
+      );
+    }
     const collection = type === 'speaking' ? collections?.speaking : type === 'community' ? collections?.community : collections?.media;
     const Icon = type === 'speaking' ? Mic2 : type === 'community' ? Network : PlayCircle;
     return collection?.length ? <div className="article-grid">{collection.map((item: Record<string, unknown>) => <article className="article-item" key={String(item.id)}><Icon /><p className="eyebrow">{String(item.organization || item.publisher || item.event_type || '')}</p><h2>{String(item.role || item.slug || '')}</h2>{item.external_url ? <a href={String(item.external_url)} target="_blank" rel="noreferrer">Open resource <ExternalLink /></a> : null}</article>)}</div> : <EmptyState icon={Icon} text="Selected entries will appear here as they are published from the dashboard." />;
