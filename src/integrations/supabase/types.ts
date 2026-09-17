@@ -683,7 +683,7 @@ export type Database = {
       }
       projects: {
         Row: {
-          approach: string | null
+          approach: Json | null
           category: string | null
           created_at: string
           current_status: string | null
@@ -693,8 +693,8 @@ export type Database = {
           github_url: string | null
           id: string
           image_url: string | null
-          impact: string | null
-          problem: string | null
+          impact: Json | null
+          problem: Json | null
           project_url: string | null
           project_year: number | null
           role: string | null
@@ -705,7 +705,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          approach?: string | null
+          approach?: Json | null
           category?: string | null
           created_at?: string
           current_status?: string | null
@@ -715,8 +715,8 @@ export type Database = {
           github_url?: string | null
           id?: string
           image_url?: string | null
-          impact?: string | null
-          problem?: string | null
+          impact?: Json | null
+          problem?: Json | null
           project_url?: string | null
           project_year?: number | null
           role?: string | null
@@ -727,7 +727,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          approach?: string | null
+          approach?: Json | null
           category?: string | null
           created_at?: string
           current_status?: string | null
@@ -737,8 +737,8 @@ export type Database = {
           github_url?: string | null
           id?: string
           image_url?: string | null
-          impact?: string | null
-          problem?: string | null
+          impact?: Json | null
+          problem?: Json | null
           project_url?: string | null
           project_year?: number | null
           role?: string | null
