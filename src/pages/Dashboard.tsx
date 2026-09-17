@@ -5,7 +5,7 @@ import { useLanguage, LANGUAGES, Lang } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnalytics';
 import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
-import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home } from 'lucide-react';
+import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home, Menu, LayoutGrid } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
 import MessagesInbox from '@/components/admin/MessagesInbox';
@@ -18,6 +18,7 @@ const Dashboard = () => {
   const { dark, toggle } = useTheme();
   const queryClient = useQueryClient();
   const [tab, setTab] = useState<string>('analytics');
+  const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<any>(null);
 
   const { data: visitors } = useVisitors();
@@ -75,16 +76,38 @@ const Dashboard = () => {
 
   if (!user) return null;
 
+  const activeLabel = tabs.find((item) => item.key === tab)?.label ?? '';
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-card border-b border-border sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold gradient-text">Advaxe Dashboard</h1>
-            <a href="/" className="nav-link flex items-center gap-1 text-xs"><Home className="w-3 h-3" /> Portfolio</a>
+    <div className="min-h-screen bg-background flex">
+      {/* Left admin menu */}
+      <aside className={`${collapsed ? 'w-16' : 'w-60'} shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-border bg-card transition-all duration-200`}>
+        <div className="h-14 flex items-center gap-2 px-4 border-b border-border">
+          <LayoutGrid className="w-5 h-5 text-primary shrink-0" />
+          {!collapsed && <span className="font-semibold text-sm truncate">Advaxe Admin</span>}
+        </div>
+        <nav className="py-2">
+          {tabs.map(({ key, icon: Icon, label }) => (
+            <button key={key} onClick={() => setTab(key)} title={label}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors border-l-2 ${tab === key ? 'border-primary bg-secondary text-foreground font-medium' : 'border-transparent text-muted-foreground hover:bg-secondary/60 hover:text-foreground'}`}>
+              <Icon className="w-4 h-4 shrink-0" />
+              {!collapsed && <span className="truncate">{label}</span>}
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      <div className="flex-1 min-w-0 flex flex-col">
+        {/* Top bar */}
+        <header className="sticky top-0 z-50 h-14 bg-card border-b border-border flex items-center justify-between px-4 gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <button onClick={() => setCollapsed(!collapsed)} className="p-2 rounded-lg hover:bg-secondary" aria-label="Menu">
+              <Menu className="w-4 h-4" />
+            </button>
+            <h1 className="text-sm font-semibold truncate">{activeLabel}</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <a href="/" className="hidden sm:flex items-center gap-1 text-xs px-2 py-1.5 rounded-lg hover:bg-secondary"><Home className="w-3 h-3" /> Site</a>
             <div className="flex gap-1">
               {LANGUAGES.map(l => (
                 <button key={l.code} onClick={() => setLang(l.code)}
@@ -100,19 +123,10 @@ const Dashboard = () => {
               <LogOut className="w-4 h-4" />
             </button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {tabs.map(({ key, icon: Icon, label }) => (
-            <button key={key} onClick={() => setTab(key)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === key ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}>
-              <Icon className="w-4 h-4" /> {label}
-            </button>
-          ))}
-        </div>
+        <div className="flex-1 px-4 py-6">
+
 
         {/* Analytics Tab */}
         {tab === 'analytics' && (
@@ -240,6 +254,7 @@ const Dashboard = () => {
             baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
             orderBy={module.orderBy} ascending={module.ascending} />
         ))}
+        </div>
       </div>
     </div>
   );
