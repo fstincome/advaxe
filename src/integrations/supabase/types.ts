@@ -158,6 +158,63 @@ export type Database = {
         }
         Relationships: []
       }
+      certifications: {
+        Row: {
+          category: string | null
+          created_at: string
+          credential_id: string | null
+          credential_url: string | null
+          entry_type: string
+          expiry_date: string | null
+          featured: boolean
+          id: string
+          image_url: string | null
+          issue_date: string | null
+          issuer: string | null
+          level: string | null
+          slug: string
+          sort_order: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          credential_id?: string | null
+          credential_url?: string | null
+          entry_type?: string
+          expiry_date?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          issue_date?: string | null
+          issuer?: string | null
+          level?: string | null
+          slug: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          credential_id?: string | null
+          credential_url?: string | null
+          entry_type?: string
+          expiry_date?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          issue_date?: string | null
+          issuer?: string | null
+          level?: string | null
+          slug?: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       click_tracking: {
         Row: {
           created_at: string | null
