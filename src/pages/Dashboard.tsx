@@ -231,6 +231,8 @@ const Dashboard = () => {
         {/* Projects Tab */}
         {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} />}
 
+        {tab === 'files' && <MediaLibrary />}
+
         {tab === 'messages' && <MessagesInbox />}
 
         {CMS_MODULES.filter((module) => module.key === tab).map((module) => (
