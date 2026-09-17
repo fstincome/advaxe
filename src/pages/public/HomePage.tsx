@@ -2,7 +2,7 @@ import { ArrowRight, BookOpen, Code2, DraftingCompass, ExternalLink, GitBranch, 
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage, Lang } from '@/contexts/LanguageContext';
-import { getLocalizedField, useExperiences, usePersonalInfo, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
+import { getLocalizedField, usePersonalInfo, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
 import { useExpertise } from '@/hooks/useProfessionalContent';
 
 const dimensions = [
@@ -16,7 +16,7 @@ export default function HomePage() {
   const { data: info } = usePersonalInfo();
   const { data: projects } = useProjects();
   const { data: expertise } = useExpertise();
-  const { data: experiences } = useExperiences();
+  
   const text = (key: string, fallback: string) => copy?.[key] || fallback;
   const featured = (projects ?? []).filter((item) => item.featured || item.status === 'published').slice(0, 3);
   return <>
@@ -56,7 +56,7 @@ export default function HomePage() {
 
     <section className="belief-band"><div className="site-shell grid gap-10 py-20 md:grid-cols-2 md:items-end"><div><p className="eyebrow">03 / Point of view</p><h2 className="mt-5 text-4xl font-semibold md:text-5xl">{text('principle_title', 'Technology should expand agency.')}</h2></div><p className="text-lg leading-8 text-muted-foreground">{text('principle_body', 'The strongest systems are understandable, locally useful and built to last beyond a launch.')}</p></div></section>
 
-    <section><div className="site-shell section-space"><div className="section-heading"><p className="eyebrow">04 / Journey</p><h2>Building since 2020</h2></div><div className="journey-line">{experiences?.slice(0,6).map((experience) => <div key={experience.id} className="journey-point"><span>{experience.period}</span><strong>{experience.company}</strong><small>{getLocalizedField(experience.title, lang)}</small></div>)}</div><Button variant="outline" asChild className="mt-10"><Link to={`/${lang}/experience`}>Explore the journey <ArrowRight /></Link></Button></div></section>
+    
 
     <section className="contact-cta"><div className="site-shell py-20 text-center"><BookOpen className="mx-auto h-8 w-8 text-primary" /><h2 className="mx-auto mt-5 max-w-3xl text-4xl font-semibold md:text-6xl">{text('contact_title', 'Let’s build something meaningful.')}</h2><p className="mx-auto mt-5 max-w-xl text-muted-foreground">{text('contact_intro', 'For product work, partnerships, speaking, training, open source or Bitcoin and Lightning initiatives.')}</p><Button size="lg" asChild className="mt-8"><Link to={`/${lang}/contact`}>Start a conversation <ArrowRight /></Link></Button></div></section>
   </>;
