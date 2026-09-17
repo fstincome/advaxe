@@ -62,7 +62,7 @@ export default function HomePage() {
   </>;
 }
 
-function FlagshipVenture({ projects, lang }: { projects: ReturnType<typeof useProjects>['data']; lang: string }) {
+function FlagshipVenture({ projects, lang }: { projects: ReturnType<typeof useProjects>['data']; lang: Lang }) {
   const flagship = (projects ?? []).find((item) => item.featured && item.slug === 'sight-africa') ?? (projects ?? []).filter((item) => item.featured).sort((a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99))[0];
   if (!flagship) return null;
   return (
