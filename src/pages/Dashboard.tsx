@@ -18,6 +18,7 @@ const Dashboard = () => {
   const { dark, toggle } = useTheme();
   const queryClient = useQueryClient();
   const [tab, setTab] = useState<string>('analytics');
+  const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<any>(null);
 
   const { data: visitors } = useVisitors();
