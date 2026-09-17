@@ -9,7 +9,7 @@ export const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'rn', label: 'Kirundi', flag: '🇧🇮' },
 ];
 
-type Translations = Record<string, Partial<Record<Lang, string>>>;
+type Translations = Record<string, Record<string, string>>;
 
 export const UI_TRANSLATIONS: Translations = {
   about_me: { fr: 'À propos', rn: 'Inyigisho', en: 'About Me', es: 'Sobre mí', de: 'Über mich', sw: 'Kuhusu Mimi' },
