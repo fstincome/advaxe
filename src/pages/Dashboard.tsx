@@ -253,6 +253,7 @@ const Dashboard = () => {
             baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
             orderBy={module.orderBy} ascending={module.ascending} />
         ))}
+        </div>
       </div>
     </div>
   );
