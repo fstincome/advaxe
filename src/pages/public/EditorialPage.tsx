@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Award, BookOpen, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText, Sparkles } from 'lucide-react';
+import { ArrowRight, Award, BookOpen, Code2, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -77,7 +77,7 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
     if (type === 'credentials') {
       const groups = [
         { key: 'certification', label: 'Certifications & education', icon: Award },
-        { key: 'skill', label: 'Core skills', icon: Sparkles },
+        { key: 'skill', label: 'Core skills', icon: Code2 },
       ] as const;
       if (!credentials?.length) return <EmptyState icon={Award} text="Certifications and skills will appear here once added from the dashboard." />;
       return <div className="space-y-12">{groups.map(({ key, label, icon: GroupIcon }) => {
