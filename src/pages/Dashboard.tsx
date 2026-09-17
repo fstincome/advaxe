@@ -223,6 +223,14 @@ const Dashboard = () => {
 
         {/* Projects Tab */}
         {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} />}
+
+        {tab === 'messages' && <MessagesInbox />}
+
+        {CMS_MODULES.filter((module) => module.key === tab).map((module) => (
+          <CollectionManager key={module.key} table={module.table} entityType={module.entityType} title={module.title}
+            baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
+            orderBy={module.orderBy} ascending={module.ascending} />
+        ))}
       </div>
     </div>
   );
