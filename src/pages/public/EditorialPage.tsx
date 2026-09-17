@@ -28,6 +28,13 @@ export const PUBLICATION_TYPES = [
 export const publicationLabel = (value?: string | null) =>
   value === 'study' ? 'Study' : value === 'policy_brief' ? 'Policy brief' : 'Article';
 
+const experienceYear = (item: any) => {
+  const source = `${item?.start_date ?? ''} ${item?.period ?? ''}`;
+  const years = source.match(/\d{4}/g);
+  if (!years?.length) return 0;
+  return Math.max(...years.map(Number));
+};
+
 export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   const [publicationFilter, setPublicationFilter] = useState<string>('all');
   const { lang } = useLanguage();
@@ -44,7 +51,10 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
     if (type === 'about') return <div className="editorial-copy"><p>{about || base.intro}</p><h2>Why I build</h2><p>I believe digital systems should be locally relevant, understandable and resilient. My work connects international engineering practice with the realities of communities and organizations in East Africa.</p><h2>Open money, practical agency</h2><p>Bitcoin and Lightning are not abstract technologies in this context. They are tools for financial inclusion, peer-to-peer exchange and infrastructure that communities can inspect, adapt and own.</p><h2>Currently exploring</h2><p>Interoperable payment infrastructure, developer education, resilient web architecture and the role of open protocols in African digital economies.</p></div>;
     if (type === 'expertise') return <div className="expertise-grid">{expertise?.map((item, index) => <article className="expertise-item" key={item.id}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>;
     if (type === 'work') return <div className="work-list">{projects?.map((item) => <article key={item.id} className="work-row"><div><p className="eyebrow">{item.category}</p><h2>{item.title}</h2><p>{getLocalizedField(item.description, lang)}</p></div><Button variant="outline" asChild><Link to={`/${lang}/work/${item.slug || item.id}`}>Case study <ArrowRight /></Link></Button></article>)}</div>;
-    if (type === 'experience') return <div className="timeline">{experiences?.map((item) => <article key={item.id} className="timeline-row"><div className="timeline-year">{item.period}</div><div><p className="eyebrow">{item.company}</p><h2>{getLocalizedField(item.title, lang)}</h2><p>{getLocalizedField(item.description, lang)}</p></div></article>)}</div>;
+    if (type === 'experience') {
+      const sorted = [...(experiences ?? [])].sort((a, b) => experienceYear(b) - experienceYear(a));
+      return <div className="timeline">{sorted.map((item) => <article key={item.id} className="timeline-row"><div className="timeline-year">{item.period}</div><div><p className="eyebrow">{item.company}</p><h2>{getLocalizedField(item.title, lang)}</h2><p>{getLocalizedField(item.description, lang)}</p></div></article>)}</div>;
+    }
     if (type === 'ideas') {
       const filtered = (articles ?? []).filter((item) => publicationFilter === 'all' || (item.publication_type ?? 'article') === publicationFilter);
       return (
