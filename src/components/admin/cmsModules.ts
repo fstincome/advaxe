@@ -42,8 +42,10 @@ export const CMS_MODULES: CmsModule[] = [
     title: 'Technology & ideas',
     baseFields: [
       { name: 'slug', label: 'Slug' },
+      { name: 'publication_type', label: 'Type (article / study / policy_brief)' },
       { name: 'category', label: 'Category' },
       { name: 'cover_image_url', label: 'Cover image URL' },
+      { name: 'document_url', label: 'PDF / document URL' },
       { name: 'published_at', label: 'Published on', type: 'date' },
       { name: 'reading_time', label: 'Reading time (min)', type: 'number' },
       { name: 'author', label: 'Author' },
