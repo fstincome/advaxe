@@ -2,6 +2,7 @@ import { Outlet, Navigate, useLocation, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import SiteHeader from './SiteHeader';
 import SiteFooter from './SiteFooter';
+import InstallPrompt from './InstallPrompt';
 import { Lang, useLanguage } from '@/contexts/LanguageContext';
 import { trackVisit } from '@/hooks/useAnalytics';
 
@@ -14,5 +15,5 @@ export default function SiteLayout() {
   useEffect(() => { if (routeLang && supported.has(routeLang)) setLang(routeLang as Lang); }, [routeLang, setLang]);
   useEffect(() => { trackVisit(location.pathname); }, [location.pathname]);
   if (!routeLang || !supported.has(routeLang)) return <Navigate to="/en" replace />;
-  return <div className="min-h-screen bg-background"><SiteHeader /><main><Outlet /></main><SiteFooter /></div>;
+  return <div className="min-h-screen bg-background"><SiteHeader /><main><Outlet /></main><SiteFooter /><InstallPrompt /></div>;
 }
