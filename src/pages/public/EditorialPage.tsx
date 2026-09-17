@@ -7,7 +7,7 @@ import { getLocalizedField, useExperiences, useProjects, useSiteContent } from '
 import { useArticles, useCertifications, useExpertise, useProfessionalCollections } from '@/hooks/useProfessionalContent';
 
 const labels: Record<string, { eyebrow: string; title: string; intro: string }> = {
-  about: { eyebrow: 'Identity & direction', title: 'Engineering resilient systems for East Africa and beyond.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
+  about: { eyebrow: 'Identity & direction', title: 'Engineering resilient systems for real-world impact.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
   expertise: { eyebrow: 'Professional capabilities', title: 'From architecture to adoption.', intro: 'A systems-level practice spanning product thinking, full-stack engineering, Bitcoin and Lightning infrastructure, open source, and technical learning.' },
   work: { eyebrow: 'Selected systems & ventures', title: 'Technology built around real constraints.', intro: 'Products and infrastructure developed for education, financial access, institutions and communities.' },
   ideas: { eyebrow: 'Technology & ideas', title: 'Articles, studies and policy briefs.', intro: 'Analysis on software architecture, open infrastructure, Bitcoin, digital sovereignty and technology policy in Africa.' },
