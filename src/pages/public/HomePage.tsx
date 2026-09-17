@@ -24,7 +24,7 @@ export default function HomePage() {
       <div className="site-shell grid items-center gap-12 pb-0 pt-14 md:pt-20 lg:grid-cols-[1.25fr_.75fr]">
         <div className="max-w-4xl animate-slide-up">
           <p className="eyebrow">{text('hero_eyebrow', 'Software architect · Builder · Educator')}</p>
-          <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-[1.04] sm:text-6xl lg:text-7xl">{text('hero_title', 'Building technology, open infrastructure and digital experiences for real-world impact.')}</h1>
+          <h1 className="mt-6 max-w-4xl text-3xl font-semibold leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl">{text('hero_title', 'Building technology, open infrastructure and digital experiences for real-world impact.')}</h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">{text('hero_intro', 'I design and build software, Bitcoin infrastructure and learning systems across East Africa.')}</p>
           <div className="mt-9 flex flex-wrap gap-3"><Button size="lg" asChild><Link to={`/${lang}/work`}>{text('explore_work', 'Explore my work')}<ArrowRight /></Link></Button><Button size="lg" variant="outline" asChild><Link to={`/${lang}/about`}>{text('about_me_cta', 'About me')}</Link></Button></div>
         </div>
