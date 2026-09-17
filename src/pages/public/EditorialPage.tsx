@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Award, BookOpen, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText, Sparkles } from 'lucide-react';
+import { ArrowRight, Award, BookOpen, Code2, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
