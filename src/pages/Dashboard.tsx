@@ -401,6 +401,10 @@ const ExperiencesEditor = ({ lang, experiences, queryClient, t }: any) => {
               <input value={item.company_url || ''} onChange={e => update(i, 'company_url', e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm outline-none" />
             </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Logo</label>
+              <MediaPicker value={item.logo_url || ''} onChange={(url) => update(i, 'logo_url', url)} />
+            </div>
           </div>
           <div>
             <label className="text-xs text-muted-foreground">Description ({lang})</label>
