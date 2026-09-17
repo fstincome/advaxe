@@ -1,4 +1,5 @@
-import { ArrowRight, BookOpen, ExternalLink, Mic2, Network, PlayCircle } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, BookOpen, Download, ExternalLink, FileText, Mic2, Network, PlayCircle, ScrollText } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
