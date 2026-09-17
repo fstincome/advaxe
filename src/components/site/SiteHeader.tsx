@@ -28,8 +28,8 @@ export default function SiteHeader() {
 
   return <header className="site-header">
     <div className="site-shell flex h-20 items-center justify-between">
-      <Link to={`/${lang}`} className="flex items-center gap-3" aria-label="Advaxe home">
-        <span className="brand-mark">A</span><span className="font-display text-lg font-semibold">Advaxe</span>
+      <Link to={`/${lang}`} className="flex items-center gap-3" aria-label="Advaxe Ndayisenga home">
+        <img src="/advaxe-profile.jpeg" alt="Advaxe Ndayisenga" className="brand-photo" /><span className="font-display text-lg font-semibold">Advaxe Ndayisenga</span>
       </Link>
       <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary navigation">
         {routes.map(([key, path]) => <Link key={path} to={`/${lang}/${path}`} className="nav-link">{label(key)}</Link>)}
