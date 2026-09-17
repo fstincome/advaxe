@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
 import MessagesInbox from '@/components/admin/MessagesInbox';
 import MediaLibrary from '@/components/admin/MediaLibrary';
+import MediaPicker from '@/components/admin/MediaPicker';
 import { CMS_MODULES } from '@/components/admin/cmsModules';
 
 const Dashboard = () => {
