@@ -310,8 +310,12 @@ const ContentEditor = ({ lang, content, personalInfo, queryClient, t }: any) => 
           {infoFields.map(key => (
             <div key={key}>
               <label className="text-sm text-muted-foreground capitalize">{key.replace('_', ' ')}</label>
-              <input value={infoForm[key] || ''} onChange={e => setInfoForm({ ...infoForm, [key]: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none mt-1" />
+              {key.endsWith('_url') ? (
+                <div className="mt-1"><MediaPicker value={infoForm[key] || ''} onChange={(url) => setInfoForm({ ...infoForm, [key]: url })} /></div>
+              ) : (
+                <input value={infoForm[key] || ''} onChange={e => setInfoForm({ ...infoForm, [key]: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-secondary border border-border text-foreground text-sm outline-none mt-1" />
+              )}
               <button onClick={() => saveInfo(key, infoForm[key] || '')} className="text-xs text-primary mt-1 hover:underline">{t('save')}</button>
             </div>
           ))}
