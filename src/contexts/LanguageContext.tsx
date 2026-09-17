@@ -61,7 +61,17 @@ const LanguageContext = createContext<{
 export const useLanguage = () => useContext(LanguageContext);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = (typeof window !== 'undefined' && localStorage.getItem('advaxe-lang')) as Lang | null;
+    return saved && ['en', 'fr', 'sw', 'rn'].includes(saved) ? saved : 'en';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('advaxe-lang', lang);
+      document.documentElement.setAttribute('data-lang', lang);
+    }
+  }, [lang]);
 
   const t = (key: string): string => {
     return UI_TRANSLATIONS[key]?.[lang] || UI_TRANSLATIONS[key]?.['en'] || key;
