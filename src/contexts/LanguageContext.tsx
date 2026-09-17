@@ -1,17 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-export type Lang = 'fr' | 'rn' | 'en' | 'es' | 'de' | 'sw';
+export type Lang = 'en' | 'fr' | 'sw' | 'rn';
 
 export const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'rn', label: 'Kirundi', flag: '🇧🇮' },
   { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'sw', label: 'Kiswahili', flag: '🇹🇿' },
+  { code: 'rn', label: 'Kirundi', flag: '🇧🇮' },
 ];
 
-type Translations = Record<string, Record<Lang, string>>;
+type Translations = Record<string, Partial<Record<Lang, string>>>;
 
 export const UI_TRANSLATIONS: Translations = {
   about_me: { fr: 'À propos', rn: 'Inyigisho', en: 'About Me', es: 'Sobre mí', de: 'Über mich', sw: 'Kuhusu Mimi' },
@@ -58,7 +56,7 @@ const LanguageContext = createContext<{
   lang: Lang;
   setLang: (l: Lang) => void;
   t: (key: string) => string;
-}>({ lang: 'fr', setLang: () => {}, t: (k) => k });
+}>({ lang: 'en', setLang: () => {}, t: (k) => k });
 
 export const useLanguage = () => useContext(LanguageContext);
 
