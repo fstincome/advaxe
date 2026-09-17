@@ -27,31 +27,16 @@ export const useClickTracking = () => useQuery({
 
 export const trackVisit = async (page: string) => {
   try {
-    const res = await fetch('https://ipapi.co/json/');
-    const geo = await res.json();
-    await supabase.from('visitors').insert({
-      page_visited: page,
-      country: geo.country_name || 'Unknown',
-      continent: geo.continent_code || 'Unknown',
-      city: geo.city || 'Unknown',
-      ip_address: geo.ip || '',
-      user_agent: navigator.userAgent,
-      referrer: document.referrer || null,
+    await supabase.functions.invoke('track-visit', {
+      body: { page, referrer: document.referrer || null },
     });
-  } catch {
-    await supabase.from('visitors').insert({
-      page_visited: page,
-      country: 'Unknown',
-      continent: 'Unknown',
-      user_agent: navigator.userAgent,
-    });
-  }
+  } catch { /* Tracking must never block the page. */ }
 };
 
 export const trackClick = async (element: string, page: string) => {
   await supabase.from('click_tracking').insert({ element, page });
 };
 
-export const logActivity = async (action: string, category: string = 'general', details?: any) => {
+export const logActivity = async (action: string, category: string = 'general', details?: Record<string, unknown>) => {
   await supabase.from('activity_logs').insert({ action, category, details });
 };
