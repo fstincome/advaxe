@@ -14,7 +14,7 @@ const COPY: Record<string, { title: string; body: string; ios: string; install: 
 const DISMISS_KEY = 'advaxe-install-dismissed';
 
 export const InstallPrompt = () => {
-  const { language } = useLanguage();
+  const { lang: language } = useLanguage();
   const copy = COPY[language] ?? COPY.en;
   const [deferred, setDeferred] = useState<InstallEvent | null>(null);
   const [iosHint, setIosHint] = useState(false);
