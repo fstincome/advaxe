@@ -77,7 +77,7 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
     if (type === 'credentials') {
       const groups = [
         { key: 'certification', label: 'Certifications & education', icon: Award },
-        { key: 'skill', label: 'Core skills', icon: Sparkles },
+        { key: 'skill', label: 'Core skills', icon: Code2 },
       ] as const;
       if (!credentials?.length) return <EmptyState icon={Award} text="Certifications and skills will appear here once added from the dashboard." />;
       return <div className="space-y-12">{groups.map(({ key, label, icon: GroupIcon }) => {
