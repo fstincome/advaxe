@@ -8,3 +8,5 @@
 - [x] Migrate/preserve current useful content
 - [x] Validate desktop/mobile, auth, forms, and database security
 - [x] Media library with file uploads (private bucket + signed links, 3 MB max)
+- [x] Show the three latest featured publications on the homepage
+- [x] Add branded About links for SIGHT Africa, BitLibera, and Free Tech Institute

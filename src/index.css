@@ -27,6 +27,9 @@
     --brand-amber: 31 93% 54%;           /* #f7931e */
     --brand-pink: 330 79% 59%;           /* #e84393 */
     --brand-violet: 248 71% 63%;         /* #6c5ce7 */
+    --brand-sight: 151 68% 34%;
+    --brand-bitlibera: 30 93% 48%;
+    --brand-freeti: 207 78% 42%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -76,6 +79,9 @@
     --brand-amber: 31 95% 58%;
     --brand-pink: 330 85% 65%;
     --brand-violet: 248 80% 70%;
+    --brand-sight: 151 62% 52%;
+    --brand-bitlibera: 31 95% 58%;
+    --brand-freeti: 204 85% 64%;
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
@@ -267,6 +273,10 @@
   .page-intro h1 { @apply mt-4 text-4xl font-semibold leading-tight md:text-6xl; }
   .page-intro p { @apply mt-6 text-lg leading-8 text-muted-foreground; }
   .editorial-copy { @apply max-w-3xl space-y-5 text-base leading-8 text-muted-foreground; }
+  .brand-link { @apply font-semibold underline decoration-2 underline-offset-4 transition-opacity hover:opacity-75; }
+  .brand-link-sight { color: hsl(var(--brand-sight)); }
+  .brand-link-bitlibera { color: hsl(var(--brand-bitlibera)); }
+  .brand-link-freeti { color: hsl(var(--brand-freeti)); }
 
   .timeline { @apply border-l border-border pl-6; }
   .timeline-row { @apply relative pb-10; }
@@ -278,6 +288,16 @@
 
   .article-grid { @apply grid gap-px border border-border bg-border md:grid-cols-2; }
   .article-item { @apply bg-background p-8; }
+  .publication-grid { @apply grid gap-px border border-border bg-border md:grid-cols-3; }
+  .publication-card { @apply flex min-w-0 flex-col bg-background; }
+  .publication-cover { @apply aspect-[16/9] w-full border-b border-border object-cover; }
+  .publication-cover-placeholder { @apply flex items-center justify-center bg-secondary; }
+  .publication-cover-placeholder svg { @apply h-9 w-9 text-primary; }
+  .publication-body { @apply flex flex-1 flex-col p-6; }
+  .publication-body h3 { @apply mt-3 text-xl font-semibold leading-snug; }
+  .publication-body > p:not(.eyebrow) { @apply mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground; }
+  .publication-body a { @apply mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground; }
+  .publication-body a svg { @apply h-4 w-4; }
   .case-image { @apply w-full border border-border object-cover; }
   .case-grid { @apply grid gap-10 md:grid-cols-2; }
 

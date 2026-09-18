@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage, Lang } from '@/contexts/LanguageContext';
 import { getLocalizedField, usePersonalInfo, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
-import { useExpertise } from '@/hooks/useProfessionalContent';
+import { useArticles, useExpertise } from '@/hooks/useProfessionalContent';
 
 const dimensions = [
   { label: 'Build', icon: Code2 }, { label: 'Design', icon: DraftingCompass }, { label: 'Teach', icon: GraduationCap },
@@ -16,9 +16,11 @@ export default function HomePage() {
   const { data: info } = usePersonalInfo();
   const { data: projects } = useProjects();
   const { data: expertise } = useExpertise();
+  const { data: articles } = useArticles();
   
   const text = (key: string, fallback: string) => copy?.[key] || fallback;
   const featured = (projects ?? []).filter((item) => item.featured || item.status === 'published').slice(0, 3);
+  const featuredPublications = (articles ?? []).filter((item) => item.featured).slice(0, 3);
   return <>
     <section className="hero-section">
       <div className="site-shell grid items-center gap-12 pb-0 pt-14 md:pt-20 lg:grid-cols-[1.25fr_.75fr]">
@@ -56,7 +58,19 @@ export default function HomePage() {
 
     <section className="belief-band"><div className="site-shell grid gap-10 py-20 md:grid-cols-2 md:items-end"><div><p className="eyebrow">03 / Point of view</p><h2 className="mt-5 text-4xl font-semibold md:text-5xl">{text('principle_title', 'Technology should expand agency.')}</h2></div><p className="text-lg leading-8 text-muted-foreground">{text('principle_body', 'The strongest systems are understandable, locally useful and built to last beyond a launch.')}</p></div></section>
 
-    
+    {featuredPublications.length > 0 && <section><div className="site-shell section-space">
+      <div className="section-heading"><p className="eyebrow">04 / {text('publications_eyebrow', 'Ideas & analysis')}</p><h2>{text('featured_publications', 'Latest featured publications')}</h2></div>
+      <div className="publication-grid">{featuredPublications.map((article) => <article key={article.id} className="publication-card">
+        {article.cover_image_url ? <img src={article.cover_image_url} alt="" loading="lazy" className="publication-cover" /> : <div className="publication-cover publication-cover-placeholder"><BookOpen /></div>}
+        <div className="publication-body">
+          <p className="eyebrow">{article.publication_type === 'policy_brief' ? 'Policy brief' : article.publication_type === 'study' ? 'Study' : 'Article'}{article.published_at ? ` · ${new Date(article.published_at).toLocaleDateString(lang)}` : ''}</p>
+          <h3>{article.title}</h3>
+          <p>{article.excerpt}</p>
+          <Link to={`/${lang}/ideas/${article.slug || article.id}`}>{text('read_publication', 'Read publication')} <ArrowRight /></Link>
+        </div>
+      </article>)}</div>
+      <Button variant="link" asChild className="mt-8 px-0"><Link to={`/${lang}/ideas`}>{text('view_all_publications', 'View all publications')} <ArrowRight /></Link></Button>
+    </div></section>}
 
     <section className="contact-cta"><div className="site-shell py-20 text-center"><BookOpen className="mx-auto h-8 w-8 text-primary" /><h2 className="mx-auto mt-5 max-w-3xl text-4xl font-semibold md:text-6xl">{text('contact_title', 'Let’s build something meaningful.')}</h2><p className="mx-auto mt-5 max-w-xl text-muted-foreground">{text('contact_intro', 'For product work, partnerships, speaking, training, open source or Bitcoin and Lightning initiatives.')}</p><Button size="lg" asChild className="mt-8"><Link to={`/${lang}/contact`}>Start a conversation <ArrowRight /></Link></Button></div></section>
   </>;

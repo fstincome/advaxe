@@ -54,21 +54,26 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   const base = labels[type];
   const about = copy?.about;
   const linkifyBio = (text: string) => {
-    const links: Record<string, string> = { 'SIGHT Africa': 'https://www.sightnetwork.org/', 'BitLibera': 'https://bitlibera.com' };
+    const links: Record<string, { href: string; className: string }> = {
+      'Free Tech Institute': { href: 'https://www.freeti.org/', className: 'brand-link brand-link-freeti' },
+      'SIGHT Africa': { href: 'https://www.sightnetwork.org/', className: 'brand-link brand-link-sight' },
+      'BitLibera': { href: 'https://www.bitlibera.com/', className: 'brand-link brand-link-bitlibera' },
+    };
     const terms = Object.keys(links).sort((a, b) => b.length - a.length);
-    let parts: (string | { label: string; href: string })[] = [text];
+    let parts: (string | { label: string; href: string; className: string })[] = [text];
     for (const term of terms) {
-      parts = parts.flatMap((part) => (typeof part === 'string' ? splitTerm(part, term, links[term]) : [part]));
+      const link = links[term];
+      if (link) parts = parts.flatMap((part) => (typeof part === 'string' ? splitTerm(part, term, link.href, link.className) : [part]));
     }
-    return parts.map((part, i) => typeof part === 'string' ? part : <a key={i} href={part.href} target="_blank" rel="noreferrer">{part.label}</a>);
+    return parts.map((part, i) => typeof part === 'string' ? part : <a key={i} href={part.href} className={part.className} target="_blank" rel="noreferrer">{part.label}</a>);
   };
-  const splitTerm = (text: string, term: string, href: string): (string | { label: string; href: string })[] => {
-    const out: (string | { label: string; href: string })[] = [];
+  const splitTerm = (text: string, term: string, href: string, className: string): (string | { label: string; href: string; className: string })[] => {
+    const out: (string | { label: string; href: string; className: string })[] = [];
     let rest = text;
     let idx = rest.indexOf(term);
     while (idx !== -1) {
       if (idx > 0) out.push(rest.slice(0, idx));
-      out.push({ label: term, href });
+      out.push({ label: term, href, className });
       rest = rest.slice(idx + term.length);
       idx = rest.indexOf(term);
     }
