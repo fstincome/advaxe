@@ -168,7 +168,7 @@ export function ArticleDetailPage() {
   const { data: articles } = useArticles();
   const item = articles?.find((entry) => entry.slug === slug || entry.id === slug);
   if (!item) return <section className="page-section"><div className="site-shell"><div className="empty-state">Publication not found.</div></div></section>;
-  const paragraphs = String(item.content ?? item.excerpt ?? '').split(/\n{2,}/).filter(Boolean);
+  const blocks = String(item.content ?? item.excerpt ?? '').split(/\n{2,}/).filter(Boolean);
   return (
     <article className="page-section">
       <div className="site-shell">
@@ -179,7 +179,14 @@ export function ArticleDetailPage() {
         </header>
         {item.cover_image_url && <img src={item.cover_image_url} alt={String(item.title ?? 'Publication')} loading="lazy" className="case-image" />}
         <div className="editorial-copy">
-          {paragraphs.length ? paragraphs.map((text, index) => <p key={index}>{text}</p>) : <p>This publication is being prepared.</p>}
+          {blocks.length ? blocks.map((text, index) => {
+            if (text.startsWith('## ')) return <h2 key={index}>{text.slice(3)}</h2>;
+            if (text.startsWith('### ')) return <h3 key={index}>{text.slice(4)}</h3>;
+            const lines = text.split('\n');
+            if (lines.every((line) => line.startsWith('- '))) return <ul key={index}>{lines.map((line) => <li key={line}>{line.slice(2)}</li>)}</ul>;
+            if (lines.every((line) => /^\d+\. /.test(line))) return <ol key={index}>{lines.map((line) => <li key={line}>{line.replace(/^\d+\. /, '')}</li>)}</ol>;
+            return <p key={index}>{text}</p>;
+          }) : <p>This publication is being prepared.</p>}
         </div>
         <div className="flex flex-wrap gap-4 pt-6">
           {item.document_url && (
