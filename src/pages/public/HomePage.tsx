@@ -20,7 +20,9 @@ export default function HomePage() {
   
   const text = (key: string, fallback: string) => copy?.[key] || fallback;
   const featured = (projects ?? []).filter((item) => item.featured || item.status === 'published').slice(0, 3);
-  const featuredPublications = (articles ?? []).filter((item) => item.featured).slice(0, 3);
+  const featuredPublications = [...(articles ?? [])]
+    .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+    .slice(0, 3);
   return <>
     <section className="hero-section">
       <div className="site-shell grid items-center gap-12 pb-0 pt-14 md:pt-20 lg:grid-cols-[1.25fr_.75fr]">
