@@ -273,6 +273,12 @@
   .page-intro h1 { @apply mt-4 text-4xl font-semibold leading-tight md:text-6xl; }
   .page-intro p { @apply mt-6 text-lg leading-8 text-muted-foreground; }
   .editorial-copy { @apply max-w-3xl space-y-5 text-base leading-8 text-muted-foreground; }
+  .editorial-copy h2 { @apply pt-8 text-3xl font-semibold leading-tight text-foreground; }
+  .editorial-copy h3 { @apply pt-4 text-xl font-semibold text-foreground; }
+  .editorial-copy ul, .editorial-copy ol { @apply space-y-2 pl-6; }
+  .editorial-copy ul { @apply list-disc; }
+  .editorial-copy ol { @apply list-decimal; }
+  .editorial-copy li::marker { @apply text-primary; }
   .brand-link { @apply font-semibold underline decoration-2 underline-offset-4 transition-opacity hover:opacity-75; }
   .brand-link-sight { color: hsl(var(--brand-sight)); }
   .brand-link-bitlibera { color: hsl(var(--brand-bitlibera)); }
