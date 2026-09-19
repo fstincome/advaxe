@@ -112,7 +112,7 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
                     <p className="eyebrow">{publicationLabel(item.publication_type)}{item.category ? ` · ${item.category}` : ''}</p>
                     <h2>{item.title}</h2>
                     <p>{item.excerpt}</p>
-                    <Link to={`/${lang}/ideas/${item.slug}`}>Read <ArrowRight /></Link>
+                    <Button size="sm" asChild className="mt-2"><Link to={`/${lang}/ideas/${item.slug}`}>Read <ArrowRight /></Link></Button>
                   </article>
                 );
               })}
