@@ -279,6 +279,7 @@
   .editorial-copy ul { @apply list-disc; }
   .editorial-copy ol { @apply list-decimal; }
   .editorial-copy li::marker { @apply text-primary; }
+  .editorial-copy blockquote { @apply border-l-2 border-primary pl-5 pt-2 text-lg font-medium italic leading-8 text-foreground; }
   .brand-link { @apply font-semibold underline decoration-2 underline-offset-4 transition-opacity hover:opacity-75; }
   .brand-link-sight { color: hsl(var(--brand-sight)); }
   .brand-link-bitlibera { color: hsl(var(--brand-bitlibera)); }

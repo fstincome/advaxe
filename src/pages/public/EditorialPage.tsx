@@ -180,11 +180,19 @@ export function ArticleDetailPage() {
         {item.cover_image_url && <img src={item.cover_image_url} alt={String(item.title ?? 'Publication')} loading="lazy" className="case-image" />}
         <div className="editorial-copy">
           {blocks.length ? blocks.map((text, index) => {
+            const lines = text.split('\n');
+            if (lines.every((line) => /^#{1,3} /.test(line))) {
+              return lines.map((line, i) => {
+                if (line.startsWith('### ')) return <h3 key={`${index}-${i}`}>{line.slice(4)}</h3>;
+                if (line.startsWith('# ')) return null; // top-level title duplicates the page heading
+                return <h2 key={`${index}-${i}`}>{line.slice(3)}</h2>;
+              });
+            }
             if (text.startsWith('## ')) return <h2 key={index}>{text.slice(3)}</h2>;
             if (text.startsWith('### ')) return <h3 key={index}>{text.slice(4)}</h3>;
-            const lines = text.split('\n');
             if (lines.every((line) => line.startsWith('- '))) return <ul key={index}>{lines.map((line) => <li key={line}>{line.slice(2)}</li>)}</ul>;
             if (lines.every((line) => /^\d+\. /.test(line))) return <ol key={index}>{lines.map((line) => <li key={line}>{line.replace(/^\d+\. /, '')}</li>)}</ol>;
+            if (text.startsWith('> ')) return <blockquote key={index}>{text.slice(2)}</blockquote>;
             return <p key={index}>{text}</p>;
           }) : <p>This publication is being prepared.</p>}
         </div>
