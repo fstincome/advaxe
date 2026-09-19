@@ -68,7 +68,7 @@ export default function HomePage() {
           <p className="eyebrow">{article.publication_type === 'policy_brief' ? 'Policy brief' : article.publication_type === 'study' ? 'Study' : 'Article'}{article.published_at ? ` · ${new Date(article.published_at).toLocaleDateString(lang)}` : ''}</p>
           <h3>{article.title}</h3>
           <p>{article.excerpt}</p>
-          <Link to={`/${lang}/ideas/${article.slug || article.id}`}>{text('read_publication', 'Read publication')} <ArrowRight /></Link>
+          <Button size="sm" asChild className="mt-2"><Link to={`/${lang}/ideas/${article.slug || article.id}`}>{text('read_publication', 'Read publication')} <ArrowRight /></Link></Button>
         </div>
       </article>)}</div>
       <Button variant="link" asChild className="mt-8 px-0"><Link to={`/${lang}/ideas`}>{text('view_all_publications', 'View all publications')} <ArrowRight /></Link></Button>
