@@ -306,6 +306,9 @@
   .publication-body a { @apply mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground; }
   .publication-body a svg { @apply h-4 w-4; }
   .case-image { @apply w-full border border-border object-cover; }
+  .article-figure { @apply my-12; }
+  .article-figure img { @apply max-h-[760px] w-full border border-border object-cover; }
+  .article-figure figcaption { @apply mt-3 text-sm leading-6 text-muted-foreground; }
   .case-grid { @apply grid gap-10 md:grid-cols-2; }
 
   .flagship-band { @apply border-y border-border bg-secondary/30; }
