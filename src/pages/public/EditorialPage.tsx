@@ -181,6 +181,8 @@ export function ArticleDetailPage() {
         <div className="editorial-copy">
           {blocks.length ? blocks.map((text, index) => {
             const lines = text.split('\n');
+             const imageMatch = text.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+             if (imageMatch) return <figure className="article-figure" key={index}><img src={imageMatch[2]} alt={imageMatch[1]} loading="lazy" /><figcaption>{imageMatch[1]}</figcaption></figure>;
             if (lines.every((line) => /^#{1,3} /.test(line))) {
               return lines.map((line, i) => {
                 if (line.startsWith('### ')) return <h3 key={`${index}-${i}`}>{line.slice(4)}</h3>;
