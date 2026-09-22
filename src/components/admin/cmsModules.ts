@@ -75,7 +75,7 @@ export const CMS_MODULES: CmsModule[] = [
     translatedFields: [
       { name: 'title', label: 'Title' },
       { name: 'excerpt', label: 'Excerpt', type: 'textarea' },
-      { name: 'content', label: 'Content', type: 'textarea' },
+      { name: 'content', label: 'Content', type: 'richtext' },
     ],
     defaults: { slug: '', status: 'draft', publication_type: 'article', author: 'Advaxe Ndayisenga', reading_time: 4, featured: false },
     orderBy: 'sort_order',
@@ -206,7 +206,7 @@ export const CMS_MODULES: CmsModule[] = [
       { name: 'eyebrow', label: 'Eyebrow' },
       { name: 'title', label: 'Title' },
       { name: 'intro', label: 'Intro', type: 'textarea' },
-      { name: 'body', label: 'Body', type: 'textarea' },
+      { name: 'body', label: 'Body', type: 'richtext' },
     ],
     defaults: { page_key: '', slug: '', status: 'published', visible: true },
   },

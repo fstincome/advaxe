@@ -10,3 +10,4 @@
 - [x] Media library with file uploads (private bucket + signed links, 3 MB max)
 - [x] Show the three latest featured publications on the homepage
 - [x] Add branded About links for SIGHT Africa, BitLibera, and Free Tech Institute
+- [x] Add a WordPress-style rich content editor with formatting, links, and media insertion

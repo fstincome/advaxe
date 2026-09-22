@@ -5,8 +5,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { LANGUAGES, Lang } from '@/contexts/LanguageContext';
 import { toast } from '@/hooks/use-toast';
 import MediaPicker from './MediaPicker';
+import RichTextEditor from './RichTextEditor';
 
-export type FieldType = 'text' | 'textarea' | 'date' | 'number' | 'boolean' | 'media';
+export type FieldType = 'text' | 'textarea' | 'richtext' | 'date' | 'number' | 'boolean' | 'media';
 
 export interface BaseField {
   name: string;
@@ -117,6 +118,7 @@ export default function CollectionManager({
 
   const renderInput = (field: BaseField, value: any, onChange: (next: any) => void) => {
     const shared = 'w-full border border-input bg-background px-3 py-2 text-sm';
+    if (field.type === 'richtext') return <RichTextEditor value={value ?? ''} onChange={onChange} />;
     if (field.type === 'textarea') return <textarea rows={4} className={shared} value={value ?? ''} placeholder={field.placeholder} onChange={(event) => onChange(event.target.value)} />;
     if (field.type === 'media') return <MediaPicker value={value} onChange={(next) => onChange(next)} />;
     if (field.type === 'boolean') return <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={Boolean(value)} onChange={(event) => onChange(event.target.checked)} />{field.label}</label>;
@@ -143,7 +145,7 @@ export default function CollectionManager({
           <article key={row.id} className="dashboard-card space-y-4">
             <div className="grid gap-3 md:grid-cols-2">
               {baseFields.map((field) => (
-                <div key={field.name} className="space-y-1">
+                <div key={field.name} className={`space-y-1 ${field.type === 'richtext' ? 'md:col-span-2' : ''}`}>
                   {field.type !== 'boolean' && <label className="text-xs font-medium text-muted-foreground">{field.label}</label>}
                   {renderInput(field, row[field.name], (next) => setField(row.id, field.name, next))}
                 </div>
