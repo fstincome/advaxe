@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedField, useExperiences, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
 import { useArticles, useCertifications, useExpertise, useProfessionalCollections, useProjectCategories } from '@/hooks/useProfessionalContent';
+import { sanitizeRichText } from '@/lib/richText';
 
 const labels: Record<string, { eyebrow: string; title: string; intro: string }> = {
   about: { eyebrow: 'Identity & direction', title: 'Engineering resilient systems for real-world impact.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
@@ -168,7 +169,7 @@ export function ArticleDetailPage() {
   const { data: articles } = useArticles();
   const item = articles?.find((entry) => entry.slug === slug || entry.id === slug);
   if (!item) return <section className="page-section"><div className="site-shell"><div className="empty-state">Publication not found.</div></div></section>;
-  const blocks = String(item.content ?? item.excerpt ?? '').split(/\n{2,}/).filter(Boolean);
+  const content = String(item.content ?? item.excerpt ?? '');
   return (
     <article className="page-section">
       <div className="site-shell">
@@ -178,26 +179,9 @@ export function ArticleDetailPage() {
           <p>{item.excerpt}</p>
         </header>
         {item.cover_image_url && <img src={item.cover_image_url} alt={String(item.title ?? 'Publication')} loading="lazy" className="case-image" />}
-        <div className="editorial-copy">
-          {blocks.length ? blocks.map((text, index) => {
-            const lines = text.split('\n');
-             const imageMatch = text.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
-             if (imageMatch) return <figure className="article-figure" key={index}><img src={imageMatch[2]} alt={imageMatch[1]} loading="lazy" /><figcaption>{imageMatch[1]}</figcaption></figure>;
-            if (lines.every((line) => /^#{1,3} /.test(line))) {
-              return lines.map((line, i) => {
-                if (line.startsWith('### ')) return <h3 key={`${index}-${i}`}>{line.slice(4)}</h3>;
-                if (line.startsWith('# ')) return null; // top-level title duplicates the page heading
-                return <h2 key={`${index}-${i}`}>{line.slice(3)}</h2>;
-              });
-            }
-            if (text.startsWith('## ')) return <h2 key={index}>{text.slice(3)}</h2>;
-            if (text.startsWith('### ')) return <h3 key={index}>{text.slice(4)}</h3>;
-            if (lines.every((line) => line.startsWith('- '))) return <ul key={index}>{lines.map((line) => <li key={line}>{line.slice(2)}</li>)}</ul>;
-            if (lines.every((line) => /^\d+\. /.test(line))) return <ol key={index}>{lines.map((line) => <li key={line}>{line.replace(/^\d+\. /, '')}</li>)}</ol>;
-            if (text.startsWith('> ')) return <blockquote key={index}>{text.slice(2)}</blockquote>;
-            return <p key={index}>{text}</p>;
-          }) : <p>This publication is being prepared.</p>}
-        </div>
+        {content ? (
+          <div className="editorial-copy" dangerouslySetInnerHTML={{ __html: sanitizeRichText(content) }} />
+        ) : <div className="editorial-copy"><p>This publication is being prepared.</p></div>}
         <div className="flex flex-wrap gap-4 pt-6">
           {item.document_url && (
             <Button asChild><a href={String(item.document_url)} target="_blank" rel="noreferrer">Download the full document <Download /></a></Button>
