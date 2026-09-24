@@ -6,6 +6,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedField, useExperiences, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
 import { useArticles, useCertifications, useExpertise, useProfessionalCollections, useProjectCategories } from '@/hooks/useProfessionalContent';
 import { sanitizeRichText } from '@/lib/richText';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 const labels: Record<string, { eyebrow: string; title: string; intro: string }> = {
   about: { eyebrow: 'Identity & direction', title: 'Engineering resilient systems for real-world impact.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
@@ -17,6 +19,7 @@ const labels: Record<string, { eyebrow: string; title: string; intro: string }> 
   community: { eyebrow: 'Community & contributions', title: 'Building ecosystems, not only products.', intro: 'Developer groups, Bitcoin education, mentorship and civic technology initiatives across the region.' },
   media: { eyebrow: 'Media', title: 'Conversations, interviews and field notes.', intro: 'Selected recordings, features, publications and moments from the work.' },
   credentials: { eyebrow: 'Certifications & skills', title: 'Verified training, proven practice.', intro: 'Degrees, certifications and core technical capabilities developed through engineering, open infrastructure and teaching work.' },
+  readings: { eyebrow: 'Readings', title: 'Documents worth reading.', intro: 'Selected reports, papers and documents available to open and download.' },
 };
 
 export const PUBLICATION_TYPES = [
@@ -46,6 +49,11 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
   const { data: articles } = useArticles();
   const { data: collections } = useProfessionalCollections();
   const { data: credentials } = useCertifications();
+  const { data: readings } = useQuery({
+    queryKey: ['readings'],
+    enabled: type === 'readings',
+    queryFn: async () => (await supabase.from('readings').select('*').eq('status', 'published').order('sort_order')).data ?? [],
+  });
   const { data: projectCategories } = useProjectCategories();
   const categoryName = (slug?: string | null) => {
     if (!slug) return '';
@@ -121,6 +129,15 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
           ) : <EmptyState icon={BookOpen} text="Articles, studies and policy briefs will appear here as they are published." />}
         </div>
       );
+    }
+    if (type === 'readings') {
+      if (!readings?.length) return <EmptyState icon={FileText} text="Readings will appear here once added from the dashboard." />;
+      return <ul className="divide-y divide-border border-y border-border">{readings.map((item: any) => (
+        <li key={item.id} className="flex items-center justify-between gap-4 py-5">
+          <span className="flex items-center gap-3 font-medium"><FileText className="h-5 w-5 text-primary" />{item.title}</span>
+          {item.file_url && <Button size="sm" asChild><a href={item.file_url} target="_blank" rel="noreferrer" download><Download /> PDF</a></Button>}
+        </li>
+      ))}</ul>;
     }
     if (type === 'credentials') {
       const groups = [

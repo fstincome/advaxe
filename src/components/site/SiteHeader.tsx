@@ -9,7 +9,7 @@ import { useSiteContent } from '@/hooks/usePortfolioData';
 const routes = [
   ['nav_about', 'about'], ['nav_expertise', 'expertise'], ['nav_work', 'work'],
   ['nav_ideas', 'ideas'], ['experience', 'experience'], ['skills', 'credentials'],
-  ['nav_contact', 'contact'],
+  ['readings', 'readings'], ['nav_contact', 'contact'],
 ];
 
 export default function SiteHeader() {

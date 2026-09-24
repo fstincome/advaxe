@@ -36,6 +36,13 @@
       "when": 1789651674742,
       "tag": "0004_create_certifications",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790246138565,
+      "tag": "0005_create_readings",
+      "breakpoints": true
     }
   ]
 }

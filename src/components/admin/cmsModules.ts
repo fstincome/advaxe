@@ -17,6 +17,21 @@ const statusField: BaseField = { name: 'status', label: 'Status (draft / publish
 
 export const CMS_MODULES: CmsModule[] = [
   {
+    key: 'readings',
+    label: 'Readings',
+    table: 'readings',
+    entityType: 'reading',
+    title: 'Readings (PDF)',
+    baseFields: [
+      { name: 'title', label: 'Title' },
+      { name: 'file_url', label: 'PDF file', type: 'media' },
+      statusField,
+      { name: 'sort_order', label: 'Order', type: 'number' },
+    ],
+    translatedFields: [],
+    defaults: { title: '', status: 'published' },
+  },
+  {
     key: 'expertise',
     label: 'Expertise',
     table: 'expertise_categories',
