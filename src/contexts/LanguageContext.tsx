@@ -14,6 +14,7 @@ type Translations = Record<string, Record<string, string>>;
 export const UI_TRANSLATIONS: Translations = {
   about_me: { fr: 'À propos', rn: 'Inyigisho', en: 'About Me', es: 'Sobre mí', de: 'Über mich', sw: 'Kuhusu Mimi' },
   skills: { fr: 'Compétences', rn: 'Ubushobozi', en: 'Skills', es: 'Habilidades', de: 'Fähigkeiten', sw: 'Ujuzi' },
+  readings: { fr: 'Lectures', rn: 'Ivyo gusoma', en: 'Readings', es: 'Lecturas', de: 'Lektüre', sw: 'Masomo' },
   experience: { fr: 'Expérience', rn: 'Uburambe', en: 'Experience', es: 'Experiencia', de: 'Erfahrung', sw: 'Uzoefu' },
   services: { fr: 'Services', rn: 'Serivisi', en: 'Services', es: 'Servicios', de: 'Dienstleistungen', sw: 'Huduma' },
   projects: { fr: 'Projets', rn: 'Imigambi', en: 'Projects', es: 'Proyectos', de: 'Projekte', sw: 'Miradi' },
