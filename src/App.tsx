@@ -40,6 +40,7 @@ const App = () => (
                 <Route path="ideas/:slug" element={<ArticleDetailPage />} />
                 <Route path="experience" element={<EditorialPage type="experience" />} />
                 <Route path="credentials" element={<EditorialPage type="credentials" />} />
+                <Route path="readings" element={<EditorialPage type="readings" />} />
                 <Route path="speaking" element={<EditorialPage type="speaking" />} />
                 <Route path="community" element={<EditorialPage type="community" />} />
                 <Route path="media" element={<EditorialPage type="media" />} />
