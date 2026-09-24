@@ -750,6 +750,33 @@ export type Database = {
         }
         Relationships: []
       }
+      readings: {
+        Row: {
+          created_at: string
+          file_url: string | null
+          id: string
+          sort_order: number
+          status: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          sort_order?: number
+          status?: string
+          title?: string
+        }
+        Update: {
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          sort_order?: number
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           description: Json
