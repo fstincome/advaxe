@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
 
 const isFormField = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -63,7 +64,7 @@ const ContentProtection = () => {
       document.removeEventListener('keydown', blockKeys);
       document.body.classList.remove('content-protected');
     };
-  }, []);
+  }, [exempt]);
 
   return null;
 };
