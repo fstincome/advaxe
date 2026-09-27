@@ -40,7 +40,7 @@ export default function SiteHeader() {
         <div className="group relative hidden sm:block">
           <Button variant="ghost" size="sm"><Globe2 /> {lang.toUpperCase()}</Button>
           <div className="invisible absolute right-0 top-full z-50 min-w-40 border border-border bg-popover p-1 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
-            {LANGUAGES.map((language) => <button key={language.code} onClick={() => changeLanguage(language.code)} className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-secondary"><span>{language.flag}</span>{language.label}</button>)}
+            {publicLanguages.map((language) => <button key={language.code} onClick={() => changeLanguage(language.code)} className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-secondary"><span>{language.flag}</span>{language.label}</button>)}
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme">{dark ? <Sun /> : <Moon />}</Button>
