@@ -26,7 +26,10 @@ const notifyPrivate = () => {
 // Deters casual copying: blocks right-click, text selection, copy/cut,
 // drag and common view-source/save shortcuts. Form fields stay usable.
 const ContentProtection = () => {
+  const { pathname } = useLocation();
+  const exempt = pathname.startsWith('/dashboard') || pathname.startsWith('/auth');
   useEffect(() => {
+    if (exempt) return;
     const block = (event: Event) => {
       if (isFormField(event.target)) return;
       event.preventDefault();
