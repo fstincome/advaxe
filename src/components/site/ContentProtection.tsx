@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
 
 const isFormField = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -26,7 +27,10 @@ const notifyPrivate = () => {
 // Deters casual copying: blocks right-click, text selection, copy/cut,
 // drag and common view-source/save shortcuts. Form fields stay usable.
 const ContentProtection = () => {
+  const { pathname } = useLocation();
+  const exempt = pathname.startsWith('/dashboard') || pathname.startsWith('/auth');
   useEffect(() => {
+    if (exempt) return;
     const block = (event: Event) => {
       if (isFormField(event.target)) return;
       event.preventDefault();
@@ -60,7 +64,7 @@ const ContentProtection = () => {
       document.removeEventListener('keydown', blockKeys);
       document.body.classList.remove('content-protected');
     };
-  }, []);
+  }, [exempt]);
 
   return null;
 };
