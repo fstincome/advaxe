@@ -25,6 +25,8 @@ export default function SiteHeader() {
     navigate(location.pathname.replace(/^\/(en|fr|sw|rn)(?=\/|$)/, `/${next}`));
     setOpen(false);
   };
+  // Kirundi hidden from the public language menu for now (still editable in the dashboard)
+  const publicLanguages = LANGUAGES.filter((language) => language.code !== 'rn');
 
   return <header className="site-header">
     <div className="site-shell flex h-20 items-center justify-between">
