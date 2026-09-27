@@ -49,7 +49,7 @@ export default function SiteHeader() {
     </div>
     {open && <nav className="border-t border-border bg-background px-4 py-5 lg:hidden">
       {routes.map(([key, path]) => <Link key={path} onClick={() => setOpen(false)} to={`/${lang}/${path}`} className="block border-b border-border py-3 text-sm">{label(key)}</Link>)}
-      <div className="mt-4 flex flex-wrap gap-2">{LANGUAGES.map((language) => <Button key={language.code} size="sm" variant={lang === language.code ? 'default' : 'outline'} onClick={() => changeLanguage(language.code)}>{language.code.toUpperCase()}</Button>)}</div>
+      <div className="mt-4 flex flex-wrap gap-2">{publicLanguages.map((language) => <Button key={language.code} size="sm" variant={lang === language.code ? 'default' : 'outline'} onClick={() => changeLanguage(language.code)}>{language.code.toUpperCase()}</Button>)}</div>
     </nav>}
   </header>;
 }
