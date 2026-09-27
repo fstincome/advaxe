@@ -25,6 +25,8 @@ export default function SiteHeader() {
     navigate(location.pathname.replace(/^\/(en|fr|sw|rn)(?=\/|$)/, `/${next}`));
     setOpen(false);
   };
+  // Kirundi hidden from the public language menu for now (still editable in the dashboard)
+  const publicLanguages = LANGUAGES.filter((language) => language.code !== 'rn');
 
   return <header className="site-header">
     <div className="site-shell flex h-20 items-center justify-between">
@@ -38,7 +40,7 @@ export default function SiteHeader() {
         <div className="group relative hidden sm:block">
           <Button variant="ghost" size="sm"><Globe2 /> {lang.toUpperCase()}</Button>
           <div className="invisible absolute right-0 top-full z-50 min-w-40 border border-border bg-popover p-1 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
-            {LANGUAGES.map((language) => <button key={language.code} onClick={() => changeLanguage(language.code)} className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-secondary"><span>{language.flag}</span>{language.label}</button>)}
+            {publicLanguages.map((language) => <button key={language.code} onClick={() => changeLanguage(language.code)} className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-secondary"><span>{language.flag}</span>{language.label}</button>)}
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme">{dark ? <Sun /> : <Moon />}</Button>
@@ -47,7 +49,7 @@ export default function SiteHeader() {
     </div>
     {open && <nav className="border-t border-border bg-background px-4 py-5 lg:hidden">
       {routes.map(([key, path]) => <Link key={path} onClick={() => setOpen(false)} to={`/${lang}/${path}`} className="block border-b border-border py-3 text-sm">{label(key)}</Link>)}
-      <div className="mt-4 flex flex-wrap gap-2">{LANGUAGES.map((language) => <Button key={language.code} size="sm" variant={lang === language.code ? 'default' : 'outline'} onClick={() => changeLanguage(language.code)}>{language.code.toUpperCase()}</Button>)}</div>
+      <div className="mt-4 flex flex-wrap gap-2">{publicLanguages.map((language) => <Button key={language.code} size="sm" variant={lang === language.code ? 'default' : 'outline'} onClick={() => changeLanguage(language.code)}>{language.code.toUpperCase()}</Button>)}</div>
     </nav>}
   </header>;
 }
