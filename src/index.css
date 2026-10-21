@@ -259,6 +259,14 @@
   .work-visual { @apply flex aspect-[16/9] items-center justify-center overflow-hidden bg-secondary; }
   .work-visual img { @apply h-full w-full object-cover; }
   .work-list { @apply divide-y divide-border border-y border-border; }
+
+  .posts-ticker { @apply border-b border-border bg-secondary/40; }
+  .ticker-label { @apply hidden shrink-0 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary sm:inline-block; }
+  .ticker-viewport { @apply min-w-0 flex-1 overflow-hidden py-2.5; }
+  .ticker-track { @apply flex w-max items-center; animation: tickerScroll 42s linear infinite; }
+  .posts-ticker:hover .ticker-track { animation-play-state: paused; }
+  .ticker-item { @apply inline-flex items-center gap-3 whitespace-nowrap pr-10 text-sm text-muted-foreground transition-colors hover:text-primary; }
+  .ticker-sep { @apply inline-block h-1 w-1 shrink-0 rounded-full bg-primary/50; }
   .work-row { @apply grid gap-4 py-8 md:grid-cols-[1fr_2fr] md:items-baseline; }
 
   .belief-band { @apply border-y border-border bg-secondary/40; }
