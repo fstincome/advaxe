@@ -24,7 +24,10 @@ export default function HomePage() {
     .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
     .slice(0, 3);
   return <>
+    {(articles ?? []).length > 0 && <LatestPostsTicker articles={articles ?? []} lang={lang} label={text('last_posts', tickerLabels[lang] ?? tickerLabels.en)} />}
+
     <section className="hero-section">
+
       <div className="site-shell grid items-center gap-12 pb-0 pt-14 md:pt-20 lg:grid-cols-[1.25fr_.75fr]">
         <div className="max-w-4xl animate-slide-up">
           <p className="eyebrow">{text('hero_eyebrow', 'Software architect · Builder · Educator')}</p>
@@ -41,8 +44,6 @@ export default function HomePage() {
         </div>
       </div>
     </section>
-
-    {(articles ?? []).length > 0 && <LatestPostsTicker articles={articles ?? []} lang={lang} label={text('last_posts', tickerLabels[lang] ?? tickerLabels.en)} />}
 
     <section className="section-band"><div className="site-shell section-space">
       <div className="section-heading"><p className="eyebrow">01 / Expertise</p><h2>{text('expertise_title', 'Capabilities for meaningful systems')}</h2></div>
