@@ -42,6 +42,8 @@ export default function HomePage() {
       </div>
     </section>
 
+    {(articles ?? []).length > 0 && <LatestPostsTicker articles={articles ?? []} lang={lang} label={text('last_posts', tickerLabels[lang] ?? tickerLabels.en)} />}
+
     <section className="section-band"><div className="site-shell section-space">
       <div className="section-heading"><p className="eyebrow">01 / Expertise</p><h2>{text('expertise_title', 'Capabilities for meaningful systems')}</h2></div>
       <div className="expertise-grid">{expertise?.map((item, index) => <article className="expertise-item" key={item.id}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>
@@ -76,6 +78,30 @@ export default function HomePage() {
 
     <section className="contact-cta"><div className="site-shell py-20 text-center"><BookOpen className="mx-auto h-8 w-8 text-primary" /><h2 className="mx-auto mt-5 max-w-3xl text-4xl font-semibold md:text-6xl">{text('contact_title', 'Let’s build something meaningful.')}</h2><p className="mx-auto mt-5 max-w-xl text-muted-foreground">{text('contact_intro', 'For product work, partnerships, speaking, training, open source or Bitcoin and Lightning initiatives.')}</p><Button size="lg" asChild className="mt-8"><Link to={`/${lang}/contact`}>Start a conversation <ArrowRight /></Link></Button></div></section>
   </>;
+}
+
+const tickerLabels: Record<string, string> = { en: 'Last posts', fr: 'Derniers articles', sw: 'Makala mpya', rn: 'Ingingo nshya' };
+
+function LatestPostsTicker({ articles, lang, label }: { articles: NonNullable<ReturnType<typeof useArticles>['data']>; lang: Lang; label: string }) {
+  const posts = articles.slice(0, 8);
+  const items = [...posts, ...posts];
+  return (
+    <div className="posts-ticker">
+      <div className="site-shell flex items-center gap-5">
+        <span className="ticker-label">{label}</span>
+        <div className="ticker-viewport" aria-label={label}>
+          <div className="ticker-track">
+            {items.map((article, index) => (
+              <Link key={`${article.id}-${index}`} to={`/${lang}/ideas/${article.slug || article.id}`} className="ticker-item" tabIndex={index >= posts.length ? -1 : 0}>
+                <span>{article.title}</span>
+                <span className="ticker-sep" aria-hidden />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function FlagshipVenture({ projects, lang }: { projects: ReturnType<typeof useProjects>['data']; lang: Lang }) {
