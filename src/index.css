@@ -268,6 +268,7 @@
       linear-gradient(180deg, hsl(var(--primary) / 0.03), transparent 70%);
   }
   .ticker-label { @apply hidden shrink-0 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary sm:inline-block; }
+  .dark .ticker-label { @apply border-primary/30 bg-primary/15; color: hsl(var(--brand-amber)); }
   .ticker-viewport { @apply min-w-0 flex-1 overflow-hidden py-2.5; }
   .ticker-track { @apply flex w-max items-center; animation: tickerScroll 42s linear infinite; }
   .posts-ticker:hover .ticker-track { animation-play-state: paused; }
