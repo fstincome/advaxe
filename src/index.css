@@ -267,11 +267,11 @@
       linear-gradient(90deg, hsl(var(--primary) / 0.09) 0%, hsl(var(--brand-amber) / 0.06) 38%, hsl(var(--brand-pink) / 0.05) 72%, transparent 100%),
       linear-gradient(180deg, hsl(var(--primary) / 0.03), transparent 70%);
   }
-  .ticker-label { @apply hidden shrink-0 rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary sm:inline-block; }
+  .ticker-label { @apply hidden shrink-0 rounded-full border border-primary/25 bg-primary/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary sm:inline-block; }
   .ticker-viewport { @apply min-w-0 flex-1 overflow-hidden py-2.5; }
   .ticker-track { @apply flex w-max items-center; animation: tickerScroll 42s linear infinite; }
   .posts-ticker:hover .ticker-track { animation-play-state: paused; }
-  .ticker-item { @apply inline-flex items-center gap-3 whitespace-nowrap pr-10 text-sm text-muted-foreground transition-colors hover:text-primary; }
+  .ticker-item { @apply inline-flex items-center gap-3 whitespace-nowrap pr-10 text-sm font-medium text-foreground/75 transition-colors hover:text-primary; }
   .ticker-sep { @apply inline-block h-1 w-1 shrink-0 rounded-full bg-primary/50; }
   .work-row { @apply grid gap-4 py-8 md:grid-cols-[1fr_2fr] md:items-baseline; }
 
