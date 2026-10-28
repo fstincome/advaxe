@@ -9,6 +9,7 @@ import { useProjectCategories } from '@/hooks/useProfessionalContent';
 import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home, Menu, LayoutGrid } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import CollectionManager from '@/components/admin/CollectionManager';
+import ArticlesManager from '@/components/admin/ArticlesManager';
 import MessagesInbox from '@/components/admin/MessagesInbox';
 import MediaLibrary from '@/components/admin/MediaLibrary';
 import MediaPicker from '@/components/admin/MediaPicker';
@@ -252,9 +253,11 @@ const Dashboard = () => {
         {tab === 'messages' && <MessagesInbox />}
 
         {CMS_MODULES.filter((module) => module.key === tab).map((module) => (
-          <CollectionManager key={module.key} table={module.table} entityType={module.entityType} title={module.title}
-            baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
-            orderBy={module.orderBy} ascending={module.ascending} />
+          module.key === 'articles'
+            ? <ArticlesManager key={module.key} />
+            : <CollectionManager key={module.key} table={module.table} entityType={module.entityType} title={module.title}
+              baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
+              orderBy={module.orderBy} ascending={module.ascending} />
         ))}
         </div>
       </div>
