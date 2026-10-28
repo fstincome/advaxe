@@ -164,6 +164,7 @@ export default function ArticlesManager() {
     const { error } = await client.from('articles').delete().eq('id', row.id);
     if (error) { toast({ title: 'Erreur', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Supprimée', description: 'Publication supprimée.' });
+    setEditing((current) => (current && current.id === row.id ? null : current));
     await queryClient.invalidateQueries({ queryKey: ['admin', 'articles'] });
   };
 
