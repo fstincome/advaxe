@@ -356,7 +356,7 @@ export default function ArticlesManager() {
               return (
                 <tr key={row.id} className="border-b border-border/60 last:border-0 hover:bg-secondary/40">
                   <td className="px-4 py-3">
-                    <button onClick={() => openEditor(row)} className="font-medium hover:text-primary hover:underline">{title}</button>
+                    <button onClick={() => openEditor(row)} className="text-left font-medium hover:text-primary hover:underline">{title}</button>
                     <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                       <span className="border border-border px-1.5 py-0.5">{TYPE_LABELS[row.publication_type] ?? row.publication_type}</span>
                       {row.category && <span>{row.category}</span>}
