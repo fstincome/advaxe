@@ -252,9 +252,11 @@ const Dashboard = () => {
         {tab === 'messages' && <MessagesInbox />}
 
         {CMS_MODULES.filter((module) => module.key === tab).map((module) => (
-          <CollectionManager key={module.key} table={module.table} entityType={module.entityType} title={module.title}
-            baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
-            orderBy={module.orderBy} ascending={module.ascending} />
+          module.key === 'articles'
+            ? <ArticlesManager key={module.key} />
+            : <CollectionManager key={module.key} table={module.table} entityType={module.entityType} title={module.title}
+              baseFields={module.baseFields} translatedFields={module.translatedFields} defaults={module.defaults}
+              orderBy={module.orderBy} ascending={module.ascending} />
         ))}
         </div>
       </div>
