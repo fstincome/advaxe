@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
@@ -10,6 +10,7 @@ import {
   Italic, Link2, List, ListOrdered, Quote, Redo2, RemoveFormatting, UnderlineIcon, Undo2, Unlink,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { legacyContentToHtml } from '@/lib/richText';
 import MediaPicker from './MediaPicker';
 
@@ -40,6 +41,7 @@ export default function RichTextEditor({ value, onChange }: Props) {
   const [pendingImage, setPendingImage] = useState('');
   const [altText, setAltText] = useState('');
   const [caption, setCaption] = useState('');
+  const imageSelection = useRef<{ from: number; to: number } | null>(null);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -72,12 +74,25 @@ export default function RichTextEditor({ value, onChange }: Props) {
 
   const insertImage = () => {
     if (!pendingImage) return;
-    editor.chain().focus().setImage({ src: pendingImage, alt: altText, title: caption || altText }).run();
-    if (caption.trim()) editor.chain().focus().insertContent(`<p><em>${caption.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</em></p>`).run();
+    const chain = editor.chain().focus();
+    if (imageSelection.current) chain.setTextSelection(imageSelection.current);
+    chain.insertContent([
+      { type: 'image', attrs: { src: pendingImage, alt: altText, title: caption || altText } },
+      ...(caption.trim() ? [{ type: 'paragraph', content: [{ type: 'text', text: caption.trim(), marks: [{ type: 'italic' }] }] }] : []),
+    ]);
+    chain.run();
     setPendingImage('');
     setAltText('');
     setCaption('');
     setMediaOpen(false);
+  };
+
+  const openImagePicker = () => {
+    imageSelection.current = { from: editor.state.selection.from, to: editor.state.selection.to };
+    setPendingImage('');
+    setAltText('');
+    setCaption('');
+    setMediaOpen(true);
   };
 
   return (
@@ -101,28 +116,34 @@ export default function RichTextEditor({ value, onChange }: Props) {
         <span className="rich-editor-separator" />
         <Tool label="Ajouter ou modifier un lien" active={editor.isActive('link')} onClick={editLink}><Link2 /></Tool>
         <Tool label="Retirer le lien" disabled={!editor.isActive('link')} onClick={() => editor.chain().focus().unsetLink().run()}><Unlink /></Tool>
-        <Tool label="Insérer une image" onClick={() => setMediaOpen(true)}><ImagePlus /></Tool>
+        <Tool label="Insérer une image" onClick={openImagePicker}><ImagePlus /></Tool>
         <Tool label="Effacer la mise en forme" onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}><RemoveFormatting /></Tool>
       </div>
       <EditorContent editor={editor} />
 
-      {mediaOpen && (
-        <div className="rich-editor-media-panel">
-          <div className="grid gap-3 md:grid-cols-2">
-            <MediaPicker value={pendingImage} onChange={setPendingImage} accept="image/*" label="Bibliothèque ou téléverser" />
-            <div className="space-y-3">
-              <input className="w-full border border-input bg-background px-3 py-2 text-sm" value={altText}
-                onChange={(event) => setAltText(event.target.value)} placeholder="Texte alternatif de l’image" />
-              <input className="w-full border border-input bg-background px-3 py-2 text-sm" value={caption}
-                onChange={(event) => setCaption(event.target.value)} placeholder="Légende (facultative)" />
+      <Dialog open={mediaOpen} onOpenChange={setMediaOpen}>
+        <DialogContent className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-3xl overflow-y-auto" aria-describedby={undefined}
+          onCloseAutoFocus={(event) => { event.preventDefault(); editor.commands.focus(undefined, { scrollIntoView: false }); }}>
+          <DialogHeader><DialogTitle>Insérer une image</DialogTitle></DialogHeader>
+          <MediaPicker inline value={pendingImage} onChange={setPendingImage} accept="image/*" label="Choisir une autre image" />
+          {pendingImage && <div className="grid gap-3 md:grid-cols-2">
+            <div className="space-y-1">
+              <label htmlFor="article-image-alt" className="text-sm">Texte alternatif</label>
+              <input id="article-image-alt" className="w-full border border-input bg-background px-3 py-2 text-sm" value={altText}
+                onChange={(event) => setAltText(event.target.value)} />
             </div>
-          </div>
-          <div className="mt-3 flex justify-end gap-2">
+            <div className="space-y-1">
+              <label htmlFor="article-image-caption" className="text-sm">Légende (facultative)</label>
+              <input id="article-image-caption" className="w-full border border-input bg-background px-3 py-2 text-sm" value={caption}
+                onChange={(event) => setCaption(event.target.value)} />
+            </div>
+          </div>}
+          <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setMediaOpen(false)}>Annuler</Button>
             <Button type="button" disabled={!pendingImage} onClick={insertImage}>Insérer l’image</Button>
-          </div>
-        </div>
-      )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

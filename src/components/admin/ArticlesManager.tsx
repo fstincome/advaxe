@@ -207,7 +207,7 @@ export default function ArticlesManager() {
               </div>
             </div>
 
-            <div className="dashboard-card space-y-2">
+            <div className="space-y-2">
               <label className="text-xs font-medium text-muted-foreground">Contenu ({lang.toUpperCase()})</label>
               <RichTextEditor value={translations[lang].content ?? ''} onChange={(next) => setTranslation('content', next)} />
             </div>
