@@ -20,7 +20,7 @@ export default function MediaPicker({ value, onChange, accept = 'image/*,applica
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
-  const { data: assets } = useQuery({ queryKey: MEDIA_QUERY_KEY, queryFn: fetchMediaAssets, enabled: open });
+  const { data: assets } = useQuery({ queryKey: MEDIA_QUERY_KEY, queryFn: fetchMediaAssets, enabled: open || inline });
 
   const upload = async (files: FileList | null) => {
     if (!files?.length) return;
