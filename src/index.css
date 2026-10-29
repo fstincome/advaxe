@@ -347,13 +347,12 @@
   }
   .empty-state { @apply border border-dashed border-border p-10 text-center text-sm text-muted-foreground; }
   .rich-editor { @apply border border-input bg-background; }
-  .rich-editor-toolbar { @apply sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b border-border bg-secondary/70 p-2 backdrop-blur; }
+  .rich-editor-toolbar { @apply sticky top-14 z-30 flex flex-wrap items-center gap-0.5 border-b border-border bg-secondary p-2; }
   .rich-editor-toolbar svg { @apply h-4 w-4; }
   .rich-editor-separator { @apply mx-1 h-6 w-px bg-border; }
   .rich-editor-content { @apply min-h-[420px] max-w-none px-5 py-5 text-foreground outline-none; }
   .rich-editor-content p.is-editor-empty:first-child::before { content: 'Commencez à écrire…'; @apply pointer-events-none float-left h-0 text-muted-foreground; }
   .rich-editor-content.ProseMirror-selectednode, .rich-editor-content .ProseMirror-selectednode { @apply outline outline-2 outline-primary; }
-  .rich-editor-media-panel { @apply border-t border-border bg-secondary/30 p-4; }
 }
 
 @layer utilities {

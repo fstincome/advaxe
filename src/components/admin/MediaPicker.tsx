@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Image as ImageIcon, Search, Upload, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 import { MEDIA_QUERY_KEY, MediaAsset, fetchMediaAssets, uploadMediaFile } from './mediaLibrary';
 
 interface Props {
@@ -9,9 +10,10 @@ interface Props {
   onChange: (url: string) => void;
   accept?: string;
   label?: string;
+  inline?: boolean;
 }
 
-export default function MediaPicker({ value, onChange, accept = 'image/*,application/pdf', label = 'Choisir un fichier' }: Props) {
+export default function MediaPicker({ value, onChange, accept = 'image/*,application/pdf', label = 'Choisir un fichier', inline = false }: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [busy, setBusy] = useState(false);
@@ -59,19 +61,19 @@ export default function MediaPicker({ value, onChange, accept = 'image/*,applica
             onChange={(event) => onChange(event.target.value)}
           />
           <div className="flex items-center gap-3 text-xs">
-            <button type="button" onClick={() => setOpen(true)} className="underline">{label}</button>
-            {value && <button type="button" onClick={() => onChange('')} className="text-destructive underline">Retirer</button>}
+            <Button type="button" variant="link" size="sm" onClick={() => { if (inline) onChange(''); else setOpen(true); }}>{label}</Button>
+            {value && <Button type="button" variant="link" size="sm" onClick={() => onChange('')} className="text-destructive">Retirer</Button>}
           </div>
         </div>
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" role="dialog" aria-modal="true">
-          <div className="flex max-h-[85vh] w-full max-w-3xl flex-col border border-border bg-card">
-            <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+      {(open || (inline && !value)) && (
+        <div className={inline ? '' : 'fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4'} role={inline ? undefined : 'dialog'} aria-modal={inline ? undefined : true}>
+          <div className="flex max-h-[55vh] w-full max-w-3xl flex-col border border-border bg-card">
+            {!inline && <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
               <h3 className="text-sm font-semibold">Bibliothèque de médias</h3>
-              <button type="button" onClick={() => setOpen(false)} aria-label="Fermer"><X className="h-4 w-4" /></button>
-            </header>
+              <Button type="button" variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Fermer"><X className="h-4 w-4" /></Button>
+            </header>}
 
             <div className="flex flex-wrap items-center gap-3 border-b border-border px-5 py-3">
               <div className="flex flex-1 items-center gap-2 border border-input bg-background px-3 py-2">
@@ -93,16 +95,16 @@ export default function MediaPicker({ value, onChange, accept = 'image/*,applica
                 </p>
               )}
               {filtered.map((asset) => (
-                <button key={asset.id} type="button"
+                <Button key={asset.id} type="button" variant="outline"
                   onClick={() => { if (asset.public_url) { onChange(asset.public_url); setOpen(false); } }}
-                  className="space-y-2 border border-border p-2 text-left hover:border-primary">
+                  className="h-auto min-w-0 flex-col items-stretch space-y-2 whitespace-normal border border-border p-2 text-left hover:border-primary">
                   {asset.mime_type?.startsWith('image/') && asset.public_url ? (
                     <img src={asset.public_url} alt={asset.alt_text ?? asset.file_name} loading="lazy" className="h-24 w-full object-cover" />
                   ) : (
                     <div className="flex h-24 w-full items-center justify-center bg-muted text-xs text-muted-foreground">Document</div>
                   )}
                   <p className="truncate text-xs">{asset.file_name}</p>
-                </button>
+                </Button>
               ))}
             </div>
           </div>
