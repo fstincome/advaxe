@@ -76,8 +76,10 @@ export default function RichTextEditor({ value, onChange }: Props) {
     if (!pendingImage) return;
     const chain = editor.chain().focus();
     if (imageSelection.current) chain.setTextSelection(imageSelection.current);
-    chain.setImage({ src: pendingImage, alt: altText, title: caption || altText });
-    if (caption.trim()) chain.insertContent({ type: 'paragraph', content: [{ type: 'text', text: caption.trim(), marks: [{ type: 'italic' }] }] });
+    chain.insertContent([
+      { type: 'image', attrs: { src: pendingImage, alt: altText, title: caption || altText } },
+      ...(caption.trim() ? [{ type: 'paragraph', content: [{ type: 'text', text: caption.trim(), marks: [{ type: 'italic' }] }] }] : []),
+    ]);
     chain.run();
     setPendingImage('');
     setAltText('');
