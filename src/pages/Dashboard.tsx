@@ -1,3 +1,4 @@
+import MenuManager from '@/components/admin/MenuManager';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -73,6 +74,7 @@ const Dashboard = () => {
     { key: 'services' as const, icon: Settings, label: t('services') },
     { key: 'projects' as const, icon: MousePointer, label: t('projects') },
     ...CMS_MODULES.map((module) => ({ key: module.key, icon: Settings, label: module.label })),
+    { key: 'menu', icon: Menu, label: 'Menu du site' },
     { key: 'files', icon: Settings, label: 'Fichiers' },
     { key: 'messages', icon: Activity, label: 'Messages' },
   ];
@@ -248,6 +250,7 @@ const Dashboard = () => {
         {/* Projects Tab */}
         {tab === 'projects' && <ProjectsEditor projects={projects} queryClient={queryClient} t={t} lang={lang} />}
 
+        {tab === 'menu' && <MenuManager />}
         {tab === 'files' && <MediaLibrary />}
 
         {tab === 'messages' && <MessagesInbox />}

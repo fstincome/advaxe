@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Globe2, Menu, Moon, Sun, X } from 'lucide-react';
+import { ChevronDown, Globe2, Menu, Moon, Sun, X } from 'lucide-react';
+import { buildTree, isExternal, useSiteMenu, MenuItem } from '@/lib/siteMenu';
 import { Button } from '@/components/ui/button';
 import { LANGUAGES, useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSiteContent } from '@/hooks/usePortfolioData';
 
-const routes = [
-  ['nav_about', 'about'], ['nav_expertise', 'expertise'], ['nav_work', 'work'],
-  ['nav_ideas', 'ideas'], ['experience', 'experience'], ['skills', 'credentials'],
-  ['readings', 'readings'], ['nav_contact', 'contact'],
-];
+
 
 export default function SiteHeader() {
   const { lang, setLang, t } = useLanguage();
@@ -20,6 +17,12 @@ export default function SiteHeader() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const label = (key: string) => copy?.[key] || t(key);
+  const { data: menu } = useSiteMenu();
+  const tree = buildTree(menu ?? []);
+  const itemLabel = (item: MenuItem) => item.labels[lang] || item.labels.en || (item.labelKey ? label(item.labelKey) : item.path);
+  const itemLink = (item: MenuItem, className: string, onClick?: () => void) => isExternal(item.path)
+    ? <a key={item.id} href={item.path} target="_blank" rel="noopener noreferrer" className={className} onClick={onClick}>{itemLabel(item)}</a>
+    : <Link key={item.id} to={`/${lang}/${item.path}`} className={className} onClick={onClick}>{itemLabel(item)}</Link>;
   const changeLanguage = (next: typeof lang) => {
     setLang(next);
     navigate(location.pathname.replace(/^\/(en|fr|sw|rn)(?=\/|$)/, `/${next}`));
@@ -34,7 +37,14 @@ export default function SiteHeader() {
         <img src="/advaxe-profile.jpeg" alt="Advaxe Ndayisenga" className="brand-photo" /><span className="font-display text-lg font-semibold">Advaxe Ndayisenga</span>
       </Link>
       <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary navigation">
-        {routes.map(([key, path]) => <Link key={path} to={`/${lang}/${path}`} className="nav-link">{label(key)}</Link>)}
+        {tree.map((item) => item.children.length === 0 ? itemLink(item, 'nav-link') : (
+          <div key={item.id} className="group relative">
+            <span className="flex items-center gap-1">{itemLink(item, 'nav-link')}<ChevronDown className="h-3 w-3 text-muted-foreground" /></span>
+            <div className="invisible absolute left-0 top-full z-50 min-w-48 border border-border bg-popover p-1 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              {item.children.map((child) => itemLink(child, 'block px-3 py-2 text-sm hover:bg-secondary'))}
+            </div>
+          </div>
+        ))}
       </nav>
       <div className="flex items-center gap-1">
         <div className="group relative hidden sm:block">
@@ -48,7 +58,10 @@ export default function SiteHeader() {
       </div>
     </div>
     {open && <nav className="border-t border-border bg-background px-4 py-5 lg:hidden">
-      {routes.map(([key, path]) => <Link key={path} onClick={() => setOpen(false)} to={`/${lang}/${path}`} className="block border-b border-border py-3 text-sm">{label(key)}</Link>)}
+      {tree.map((item) => <div key={item.id}>
+        {itemLink(item, 'block border-b border-border py-3 text-sm', () => setOpen(false))}
+        {item.children.map((child) => itemLink(child, 'block border-b border-border py-3 pl-5 text-sm text-muted-foreground', () => setOpen(false)))}
+      </div>)}
       <div className="mt-4 flex flex-wrap gap-2">{publicLanguages.map((language) => <Button key={language.code} size="sm" variant={lang === language.code ? 'default' : 'outline'} onClick={() => changeLanguage(language.code)}>{language.code.toUpperCase()}</Button>)}</div>
     </nav>}
   </header>;
