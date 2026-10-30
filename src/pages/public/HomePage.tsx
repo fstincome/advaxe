@@ -80,30 +80,6 @@ export default function HomePage() {
   </>;
 }
 
-const tickerLabels: Record<string, string> = { en: 'Last posts', fr: 'Derniers articles', sw: 'Makala mpya', rn: 'Ingingo nshya' };
-
-function LatestPostsTicker({ articles, lang, label }: { articles: NonNullable<ReturnType<typeof useArticles>['data']>; lang: Lang; label: string }) {
-  const posts = articles.slice(0, 8);
-  const items = [...posts, ...posts];
-  return (
-    <div className="posts-ticker">
-      <div className="site-shell flex items-center gap-5">
-        <span className="ticker-label">{label}</span>
-        <div className="ticker-viewport" aria-label={label}>
-          <div className="ticker-track">
-            {items.map((article, index) => (
-              <Link key={`${article.id}-${index}`} to={`/${lang}/ideas/${article.slug || article.id}`} className="ticker-item" tabIndex={index >= posts.length ? -1 : 0}>
-                <span>{article.title}</span>
-                <span className="ticker-sep" aria-hidden />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function FlagshipVenture({ projects, lang }: { projects: ReturnType<typeof useProjects>['data']; lang: Lang }) {
   const flagship = (projects ?? []).find((item) => item.featured && item.slug === 'sight-africa') ?? (projects ?? []).filter((item) => item.featured).sort((a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99))[0];
   if (!flagship) return null;
