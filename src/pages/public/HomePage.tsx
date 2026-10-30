@@ -1,7 +1,7 @@
 import { ArrowRight, BookOpen, Code2, DraftingCompass, ExternalLink, GitBranch, GraduationCap, Network, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useLanguage, Lang } from '@/contexts/LanguageContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedField, usePersonalInfo, useProjects, useSiteContent } from '@/hooks/usePortfolioData';
 import { useArticles, useExpertise } from '@/hooks/useProfessionalContent';
 
@@ -24,9 +24,8 @@ export default function HomePage() {
     .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
     .slice(0, 3);
   return <>
-    {(articles ?? []).length > 0 && <LatestPostsTicker articles={articles ?? []} lang={lang} label={text('last_posts', tickerLabels[lang] ?? tickerLabels.en)} />}
-
     <section className="hero-section">
+
 
       <div className="site-shell grid items-center gap-12 pb-0 pt-14 md:pt-20 lg:grid-cols-[1.25fr_.75fr]">
         <div className="max-w-4xl animate-slide-up">
