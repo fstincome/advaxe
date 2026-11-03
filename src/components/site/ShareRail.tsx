@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AtSign, Globe, Link2, MessageCircle, Share2 } from 'lucide-react';
-const Facebook = Globe; const Linkedin = Share2; const Twitter = AtSign;
+import { Link2, MessageCircle } from 'lucide-react';
+const txt = (s: string) => ({ className }: { className?: string }) => <span className={`${className} flex items-center justify-center text-[13px] font-bold leading-none`}>{s}</span>;
+const Facebook = txt('f'); const Linkedin = txt('in'); const Twitter = txt('𝕏');
 import { toast } from '@/hooks/use-toast';
 
 export default function ShareRail({ title }: { title: string }) {
