@@ -8,6 +8,7 @@ import { useArticles, useCertifications, useExpertise, useProfessionalCollection
 import { sanitizeRichText } from '@/lib/richText';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import ShareRail from '@/components/site/ShareRail';
 
 const labels: Record<string, { eyebrow: string; title: string; intro: string }> = {
   about: { eyebrow: 'Identity & direction', title: 'Engineering resilient systems for real-world impact.', intro: 'Software engineering, open monetary infrastructure and practical education are different expressions of the same commitment: expanding what people and communities can build for themselves.' },
@@ -194,6 +195,7 @@ export function ArticleDetailPage() {
   const content = String(item.content ?? item.excerpt ?? '');
   return (
     <article className="page-section">
+      <ShareRail title={String(item.title ?? "")} />
       <div className="site-shell">
         <header className="page-intro">
           <p className="eyebrow">{publicationLabel(item.publication_type)}{item.category ? ` · ${item.category}` : ''}{item.published_at ? ` · ${new Date(item.published_at).toLocaleDateString(lang)}` : ''}</p>
