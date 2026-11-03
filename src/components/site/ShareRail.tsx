@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Facebook, Link2, Linkedin, MessageCircle, Twitter } from 'lucide-react';
+import { AtSign, Globe, Link2, MessageCircle, Share2 } from 'lucide-react';
+const Facebook = Globe; const Linkedin = Share2; const Twitter = AtSign;
 import { toast } from '@/hooks/use-toast';
 
 export default function ShareRail({ title }: { title: string }) {
