@@ -115,9 +115,14 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
             <div className="article-grid">
               {filtered.map((item) => {
                 const Icon = (item.publication_type ?? 'article') === 'study' ? FileText : (item.publication_type === 'policy_brief' ? ScrollText : BookOpen);
+                const image = item.cover_image_url || String(item.content ?? '').match(/<img[^>]+src=["']([^"']+)["']/i)?.[1];
                 return (
                   <article key={item.id} className="article-item">
-                    <Icon />
+                    {image ? (
+                      <Link to={`/${lang}/ideas/${item.slug}`} className="-mx-1 mb-2 block aspect-[16/9] overflow-hidden rounded-md bg-muted">
+                        <img src={String(image)} alt={String(item.title ?? '')} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                      </Link>
+                    ) : <Icon />}
                     <p className="eyebrow">{publicationLabel(item.publication_type)}{item.category ? ` · ${item.category}` : ''}</p>
                     <h2>{item.title}</h2>
                     <p>{item.excerpt}</p>
