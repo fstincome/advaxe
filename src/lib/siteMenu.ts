@@ -13,7 +13,7 @@ export interface MenuItem {
 export const MENU_SETTING_KEY = 'site_menu';
 
 export const PAGE_OPTIONS = [
-  ['about', 'About'], ['expertise', 'Expertise'], ['work', 'Work'], ['ideas', 'Ideas / Publications'],
+  ['about', 'About'], ['expertise', 'Expertise'], ['work', 'Work'], ['ideas', 'Articles'],
   ['experience', 'Experience'], ['credentials', 'Certifications & skills'], ['readings', 'Readings'],
   ['speaking', 'Speaking'], ['community', 'Community'], ['media', 'Media'], ['contact', 'Contact'],
 ] as const;
