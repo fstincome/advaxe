@@ -70,6 +70,14 @@ export default function ArticlesManager() {
     return map;
   }, [data]);
 
+  const [extraCategories, setExtraCategories] = useState<string[]>([]);
+  const categories = useMemo(() => {
+    const set = new Set<string>(extraCategories);
+    rows.forEach((row) => { if (row.category) set.add(String(row.category)); });
+    if (editing?.category) set.add(String(editing.category));
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [rows, extraCategories, editing?.category]);
+
   const filtered = rows.filter((row) => {
     const title = titlesByEntity[row.id] ?? '';
     if (search.trim() && !title.toLowerCase().includes(search.trim().toLowerCase()) && !String(row.slug ?? '').toLowerCase().includes(search.trim().toLowerCase())) return false;
@@ -256,7 +264,20 @@ export default function ArticlesManager() {
               </div>
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Catégorie</label>
-                <input className={`${shared} mt-1`} value={editing.category ?? ''} onChange={(event) => setField('category', event.target.value)} placeholder="Ex. Bitcoin, Tech" />
+                <div className="mt-1 flex gap-2">
+                  <select className={shared} value={editing.category ?? ''} onChange={(event) => setField('category', event.target.value)}>
+                    <option value="">— Aucune —</option>
+                    {categories.map((name) => <option key={name} value={name}>{name}</option>)}
+                  </select>
+                  <button type="button" title="Ajouter une catégorie" aria-label="Ajouter une catégorie"
+                    onClick={() => {
+                      const name = window.prompt('Nouvelle catégorie')?.trim();
+                      if (!name) return;
+                      setExtraCategories((current) => (current.includes(name) ? current : [...current, name]));
+                      setField('category', name);
+                    }}
+                    className="flex shrink-0 items-center border border-input px-3 hover:bg-secondary"><Plus className="h-4 w-4" /></button>
+                </div>
               </div>
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Auteur</label>
