@@ -122,7 +122,7 @@ export default function EditorialPage({ type }: { type: keyof typeof labels }) {
                       <Link to={`/${lang}/ideas/${item.slug}`} className="-mx-1 mb-2 block aspect-[16/9] overflow-hidden rounded-md bg-muted">
                         <img src={String(image)} alt={String(item.title ?? '')} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
                       </Link>
-                    ) : <Icon />
+                    ) : <Icon />}
                     <p className="eyebrow">{publicationLabel(item.publication_type)}{item.category ? ` · ${item.category}` : ''}</p>
                     <h2>{item.title}</h2>
                     <p>{item.excerpt}</p>
