@@ -22,7 +22,9 @@ export function socialPreviews(env: Record<string, string>): Plugin {
           headers: { apikey: key, Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(20000),
         });
         if (!response.ok) throw new Error(`Cannot load published social preview content (${response.status})`);
-        return response.json();
+        const data: unknown = await response.json();
+        if (!Array.isArray(data)) throw new Error('Invalid published content response');
+        return data as T[];
       };
       const [articles, translations] = await Promise.all([
         query<Article>('articles', 'select=id,slug,cover_image_url&status=eq.published'),
