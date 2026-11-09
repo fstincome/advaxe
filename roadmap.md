@@ -1,5 +1,7 @@
 # Advaxe rebuild roadmap
 
+- [ ] Correct uncapped analytics totals, add page/article breakdown and anonymous unique counts, verify authenticated dashboard and visit readback
+
 - [x] Secure admin authorization and content policies
 - [x] Add structured multilingual content model and media/contact entities
 - [x] Build locale-aware public routes and professional design system
