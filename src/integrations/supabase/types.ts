@@ -1013,6 +1013,7 @@ export type Database = {
       }
       visitors: {
         Row: {
+          anonymous_id: string | null
           city: string | null
           continent: string | null
           country: string | null
@@ -1024,6 +1025,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          anonymous_id?: string | null
           city?: string | null
           continent?: string | null
           country?: string | null
@@ -1035,6 +1037,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          anonymous_id?: string | null
           city?: string | null
           continent?: string | null
           country?: string | null
@@ -1052,6 +1055,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      dashboard_analytics: { Args: { days?: number }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

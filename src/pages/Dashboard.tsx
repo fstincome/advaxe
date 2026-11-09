@@ -1,10 +1,11 @@
 import MenuManager from '@/components/admin/MenuManager';
+import AnalyticsOverview from '@/components/admin/AnalyticsOverview';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage, LANGUAGES, Lang } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useVisitors, useActivityLogs, useClickTracking } from '@/hooks/useAnalytics';
+import { useActivityLogs, useClickTracking } from '@/hooks/useAnalytics';
 import { useExperiences, useSkills, useServices, useProjects, useSiteContent, usePersonalInfo, useSocialLinks } from '@/hooks/usePortfolioData';
 import { useProjectCategories } from '@/hooks/useProfessionalContent';
 import { LogOut, Sun, Moon, Globe, Users, Activity, MousePointer, BarChart3, Settings, Plus, Trash2, Save, Home, Menu, LayoutGrid } from 'lucide-react';
@@ -25,7 +26,6 @@ const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<any>(null);
 
-  const { data: visitors } = useVisitors();
   const { data: activityLogs } = useActivityLogs();
   const { data: clicks } = useClickTracking();
   const { data: experiences } = useExperiences();
@@ -51,20 +51,6 @@ const Dashboard = () => {
     await supabase.auth.signOut();
     navigate('/');
   };
-
-  // Analytics computations
-  const countryStats = visitors?.reduce((acc: Record<string, number>, v) => {
-    acc[v.country || 'Unknown'] = (acc[v.country || 'Unknown'] || 0) + 1;
-    return acc;
-  }, {}) || {};
-
-  const continentStats = visitors?.reduce((acc: Record<string, number>, v) => {
-    acc[v.continent || 'Unknown'] = (acc[v.continent || 'Unknown'] || 0) + 1;
-    return acc;
-  }, {}) || {};
-
-  const sortedCountries = Object.entries(countryStats).sort((a, b) => b[1] - a[1]);
-  const sortedContinents = Object.entries(continentStats).sort((a, b) => b[1] - a[1]);
 
   const tabs = [
     { key: 'analytics' as const, icon: BarChart3, label: 'Analytics' },
@@ -136,68 +122,7 @@ const Dashboard = () => {
         {/* Analytics Tab */}
         {tab === 'analytics' && (
           <div className="space-y-6">
-            {/* Summary cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="dashboard-card">
-                <div className="flex items-center gap-3 mb-2">
-                  <Users className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold">{t('visitors')}</h3>
-                </div>
-                <p className="text-3xl font-bold">{visitors?.length || 0}</p>
-              </div>
-              <div className="dashboard-card">
-                <div className="flex items-center gap-3 mb-2">
-                  <Activity className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold">{t('activity')}</h3>
-                </div>
-                <p className="text-3xl font-bold">{activityLogs?.length || 0}</p>
-              </div>
-              <div className="dashboard-card">
-                <div className="flex items-center gap-3 mb-2">
-                  <MousePointer className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold">{t('clicks')}</h3>
-                </div>
-                <p className="text-3xl font-bold">{clicks?.length || 0}</p>
-              </div>
-            </div>
-
-            {/* Visitors by country & continent */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="dashboard-card">
-                <h3 className="font-semibold mb-4">{t('visitors')} par pays</h3>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {sortedCountries.map(([country, count]) => (
-                    <div key={country} className="flex items-center justify-between text-sm">
-                      <span>{country}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 h-2 rounded-full bg-muted overflow-hidden">
-                          <div className="h-full rounded-full bg-primary" style={{ width: `${(count / (visitors?.length || 1)) * 100}%` }} />
-                        </div>
-                        <span className="text-muted-foreground w-8 text-right">{count}</span>
-                      </div>
-                    </div>
-                  ))}
-                  {sortedCountries.length === 0 && <p className="text-muted-foreground text-sm">Aucun visiteur encore</p>}
-                </div>
-              </div>
-              <div className="dashboard-card">
-                <h3 className="font-semibold mb-4">{t('visitors')} par continent</h3>
-                <div className="space-y-2">
-                  {sortedContinents.map(([continent, count]) => (
-                    <div key={continent} className="flex items-center justify-between text-sm">
-                      <span>{continent}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 h-2 rounded-full bg-muted overflow-hidden">
-                          <div className="h-full rounded-full bg-primary" style={{ width: `${(count / (visitors?.length || 1)) * 100}%` }} />
-                        </div>
-                        <span className="text-muted-foreground w-8 text-right">{count}</span>
-                      </div>
-                    </div>
-                  ))}
-                  {sortedContinents.length === 0 && <p className="text-muted-foreground text-sm">Aucun visiteur encore</p>}
-                </div>
-              </div>
-            </div>
+            <AnalyticsOverview />
 
             {/* Activity logs */}
             <div className="dashboard-card">
