@@ -11,3 +11,4 @@
 - [x] Show the three latest featured publications on the homepage
 - [x] Add branded About links for SIGHT Africa, BitLibera, and Free Tech Institute
 - [x] Add a WordPress-style rich content editor with formatting, links, and media insertion
+- [x] Generate article-specific social share pages and optimized image thumbnails; verify preview HTML, real photo dimensions, copy/share links and reader forwarding locally (live social previews require publication)

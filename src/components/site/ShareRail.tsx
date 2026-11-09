@@ -3,9 +3,25 @@ import { Link2, MessageCircle } from 'lucide-react';
 const txt = (s: string) => ({ className }: { className?: string }) => <span className={`${className} flex items-center justify-center text-[13px] font-bold leading-none`}>{s}</span>;
 const Facebook = txt('f'); const Linkedin = txt('in'); const Twitter = txt('𝕏');
 import { toast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { SITE_ORIGIN } from '@/lib/socialShare';
 
 export default function ShareRail({ title }: { title: string }) {
   const [progress, setProgress] = useState(0);
+  const pathname = window.location.pathname;
+  const [shareUrl, setShareUrl] = useState(`${SITE_ORIGIN}${pathname}`);
+
+  useEffect(() => {
+    let cancelled = false;
+    setShareUrl(`${SITE_ORIGIN}${pathname}`);
+    fetch('/share/manifest.json', { cache: 'no-cache' })
+      .then((response) => response.ok ? response.json() : {})
+      .then((manifest: Record<string, string>) => {
+        const candidate = manifest[pathname];
+        if (!cancelled && candidate?.startsWith(`${SITE_ORIGIN}/share/`)) setShareUrl(candidate);
+      }).catch(() => { /* Keep the canonical article URL if no preview is published yet. */ });
+    return () => { cancelled = true; };
+  }, [pathname]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -18,7 +34,7 @@ export default function ShareRail({ title }: { title: string }) {
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
   }, []);
 
-  const url = typeof window !== 'undefined' ? window.location.href : '';
+  const url = shareUrl;
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(title);
   const links = [
@@ -44,7 +60,7 @@ export default function ShareRail({ title }: { title: string }) {
         {links.map(({ label, icon: Icon, href }) => (
           <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={`Share on ${label}`} title={label} className={btn}><Icon className="h-4 w-4" /></a>
         ))}
-        <button type="button" onClick={copy} aria-label="Copy link" title="Copy link" className={btn}><Link2 className="h-4 w-4" /></button>
+        <Button variant="outline" size="icon" onClick={copy} aria-label="Copy link" title="Copy link" className={btn}><Link2 className="h-4 w-4" /></Button>
       </aside>
     </>
   );
