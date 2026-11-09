@@ -43,6 +43,13 @@
       "when": 1790246138565,
       "tag": "0005_create_readings",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794210119407,
+      "tag": "0006_accurate_page_analytics",
+      "breakpoints": true
     }
   ]
 }
