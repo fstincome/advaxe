@@ -19,6 +19,10 @@ Deno.serve(async (request) => {
     const page = typeof body.page === "string" ? body.page.slice(0, 300) : "/";
     const referrer = typeof body.referrer === "string" ? body.referrer.slice(0, 500) : null;
     const userAgent = request.headers.get("user-agent")?.slice(0, 500) ?? null;
+    if (/(bot|crawler|spider|headless|facebookexternalhit|whatsapp|preview|curl|wget)/i.test(userAgent ?? "") || !/^\/(en|fr|sw|rn)(\/|$)/.test(page)) {
+      return new Response(JSON.stringify({ ok: true, skipped: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    const anonymousId = typeof body.anonymous_id === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.anonymous_id) ? body.anonymous_id : null;
     const country = request.headers.get("cf-ipcountry") ?? "Unknown";
     const city = request.headers.get("cf-ipcity") ?? "Unknown";
     const continent = request.headers.get("cf-continent") ?? "Unknown";
@@ -31,6 +35,7 @@ Deno.serve(async (request) => {
 
     const { error } = await client.from("visitors").insert({
       page_visited: page,
+      anonymous_id: anonymousId,
       referrer,
       user_agent: userAgent,
       country,
